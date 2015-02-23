@@ -1,0 +1,16 @@
+{
+    "name": "kgilden/pager",
+    "description": "A library to split results into multiple pages",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kristen Gilden",
+            "email": "kristen.gilden@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {"KG\\Pager\\": "src/"}
+    }
+}
