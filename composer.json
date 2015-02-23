@@ -12,5 +12,10 @@
     "require": {},
     "autoload": {
         "psr-4": {"KG\\Pager\\": "src/"}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }
