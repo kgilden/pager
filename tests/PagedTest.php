@@ -30,6 +30,22 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(42, new Paged($adapter, $strategy, 1));
     }
 
+    public function testCallbacksApplied()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
+
+        $pages = new Paged($adapter, $strategy, 1);
+        $pages->callback(function (array $items) {
+            return array_map(function ($item) { return $item * 4; }, $items);
+        });
+
+        $this->assertEquals(array(8, 16), iterator_to_array($pages[3]->getIterator()));
+    }
+
     public function testZeroPageNotExists()
     {
         $strategy = $this->getMockStrategy();
@@ -94,6 +110,29 @@ class PagedTest extends \PHPUnit_Framework_TestCase
 
         $pages = new Paged($adapter, $strategy, 2);
         $this->assertSame($pages[3], $pages[3]);
+    }
+
+    /**
+     * This makes sure caching pages doesn't affect the applying of callbacks.
+     * They should be reapplied as soon as a new callback has been added.
+     */
+    public function testCallbacksBustPageCache()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
+
+        $pages = new Paged($adapter, $strategy, 1);
+
+        $page = $pages[3]->getIterator(); // Should cache page 3.
+
+        $pages->callback(function (array $items) {
+            return array_map(function ($item) { return $item * 4; }, $items);
+        });
+
+        $this->assertNotSame($page, $pages[3]->getIterator());
     }
 
     public function testgetCurrentReturnsCurrentPage()

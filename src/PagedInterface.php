@@ -23,4 +23,11 @@ interface PagedInterface extends \ArrayAccess, \Countable
      * @return PageInterface
      */
     public function getCurrent();
+
+    /**
+     * @param \Callable $callback A callback to modify items in the paged object.
+     *
+     * @return PagedInterface
+     */
+    public function callback($callback);
 }

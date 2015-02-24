@@ -11,6 +11,7 @@
 
 namespace KG\Pager;
 
+use KG\Pager\Adapter\CallbackDecorator;
 use KG\Pager\Exception\InvalidPageException;
 
 final class Paged implements PagedInterface
@@ -56,6 +57,19 @@ final class Paged implements PagedInterface
     public function count()
     {
         return $this->strategy->getCount($this->adapter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function callback($callback)
+    {
+        $this->adapter = new CallbackDecorator($this->adapter, $callback);
+
+        // Invalidate the cache since all callbacks must be reapplied.
+        $this->pages = array();
+
+        return $this;
     }
 
     /**
