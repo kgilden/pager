@@ -92,7 +92,7 @@ iterator_to_array($pages[1]->getIterator()); // [2, 4]
 Installation
 ------------
 
-Install using [composer](composer): `composer.phar require kgilden/pager`
+Install using [composer](https://getcomposer.org/download/): `composer.phar require kgilden/pager`
 
 Testing
 -------
@@ -104,6 +104,3 @@ License
 -------
 
 This library is under the [MIT license](LICENSE).
-
-composer: https://getcomposer.org/download/
-license: LICENSE
