@@ -34,6 +34,11 @@ final class DqlAdapter implements AdapterInterface
     private $paginator;
 
     /**
+     * @var integer|null
+     */
+    private $itemCount;
+
+    /**
      * @param Paginator $paginator
      */
     public function __construct(Paginator $paginator)
@@ -59,7 +64,7 @@ final class DqlAdapter implements AdapterInterface
      */
     public function getItemCount()
     {
-        return $this->paginator->count();
+        return $this->itemCount ?: $this->itemCount = $this->paginator->count();
     }
 
     /**

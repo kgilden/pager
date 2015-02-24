@@ -31,11 +31,6 @@ final class Paged implements PagedInterface
     private $page;
 
     /**
-     * @var integer|null
-     */
-    private $itemCount;
-
-    /**
      * @param AdapterInterface        $adapter
      * @param PagingStrategyInterface $strategy
      * @param integer                 $page     Current page
@@ -105,13 +100,5 @@ final class Paged implements PagedInterface
     public function offsetUnset($offset)
     {
         throw new \BadMethodCallException("Array access of class " . get_class($this) . " is read-only!");
-    }
-
-    /**
-     * @return integer
-     */
-    private function getItemCount()
-    {
-        return $this->itemCount ?: $this->itemCount = $this->adapter->getItemCount();
     }
 }
