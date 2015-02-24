@@ -21,14 +21,14 @@ final class Paged implements PagedInterface
     private $adapter;
 
     /**
-     * @var integer
+     * @var StrategyInterface
      */
-    private $page;
+    private $strategy;
 
     /**
      * @var integer
      */
-    private $itemsPerPage;
+    private $page;
 
     /**
      * @var integer|null
@@ -36,15 +36,15 @@ final class Paged implements PagedInterface
     private $itemCount;
 
     /**
-     * @param AdapterInterface $adapter
-     * @param integer          $page         Current page
-     * @param integer          $itemsPerPage Number of items on a single page
+     * @param AdapterInterface        $adapter
+     * @param PagingStrategyInterface $strategy
+     * @param integer                 $page     Current page
      */
-    public function __construct(AdapterInterface $adapter, $page, $itemsPerPage)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $page)
     {
         $this->adapter = $adapter;
+        $this->strategy = $strategy;
         $this->page = $page;
-        $this->itemsPerPage = $itemsPerPage;
     }
 
     /**
@@ -52,16 +52,7 @@ final class Paged implements PagedInterface
      */
     public function count()
     {
-        $count = (int) ceil($this->getItemCount() / $this->itemsPerPage);
-
-        if (0 === $count) {
-            // $count is 0, if no elements were found. In that case the number
-            // of pages is set to 1 to prevent any problems on the client side.
-            // @todo is this really necessary?
-            $count = 1;
-        }
-
-        return $count;
+        return $this->strategy->getCount($this->adapter);
     }
 
     /**
@@ -91,9 +82,9 @@ final class Paged implements PagedInterface
             throw new InvalidPageException($offset, $this->count());
         }
 
-        $itemOffset = ($offset - 1) * $this->itemsPerPage;
+        list($itemOffset, $length) = $this->strategy->getLimit($this->adapter, $offset);
 
-        return new Page($this->adapter, $offset, $itemOffset, $this->itemsPerPage);
+        return new Page($this->adapter, $offset, $itemOffset, $length);
     }
 
     /**

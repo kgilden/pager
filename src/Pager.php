@@ -11,19 +11,21 @@
 
 namespace KG\Pager;
 
+use KG\Pager\PagingStrategy\EquallyPaged;
+
 final class Pager implements PagerInterface
 {
     /**
-     * @var integer
+     * @var PagingStrategyInterface
      */
-    private $itemsPerPage;
+    private $strategy;
 
     /**
-     * @param integer $itemsPerPage
+     * @param PagingStrategyInterface|null $strategy
      */
-    public function __construct($itemsPerPage = 25)
+    public function __construct(PagingStrategyInterface $strategy = null)
     {
-        $this->itemsPerPage = $itemsPerPage;
+        $this->strategy = $strategy ?: new EquallyPaged();
     }
 
     /**
@@ -31,6 +33,6 @@ final class Pager implements PagerInterface
      */
     public function paginate(AdapterInterface $adapter, $page = null)
     {
-        return new Paged($adapter, $page ?: 1, $this->itemsPerPage);
+        return new Paged($adapter, $this->strategy, $page ?: 1);
     }
 }
