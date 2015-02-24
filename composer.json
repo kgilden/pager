@@ -10,8 +10,14 @@
     ],
     "minimum-stability": "stable",
     "require": {},
+    "require-dev": {
+        "doctrine/orm": "~2.3"
+    },
     "autoload": {
         "psr-4": {"KG\\Pager\\": "src/"}
+    },
+    "suggest": {
+        "doctrine/orm": "~2.3, if you're using DqlAdapter"
     },
     "extra": {
         "branch-alias": {
