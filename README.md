@@ -48,7 +48,7 @@ simplest, "equally paged" strategy is used by default. However, more intricate
 strategies can be implemented. For example, the last two pages could be merged,
 if there are too few items on the last page.
 
-``php
+```php
 <?php
 
 use KG\Pager\Pager;
