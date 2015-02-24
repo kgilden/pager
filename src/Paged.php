@@ -31,6 +31,14 @@ final class Paged implements PagedInterface
     private $page;
 
     /**
+     * A list of pages which have been fetched from the adapter (no point in
+     * asking for the same page more than once).
+     *
+     * @var PagedInterface[]
+     */
+    private $pages = array();
+
+    /**
      * @param AdapterInterface        $adapter
      * @param PagingStrategyInterface $strategy
      * @param integer                 $page     Current page
@@ -77,9 +85,13 @@ final class Paged implements PagedInterface
             throw new InvalidPageException($offset, $this->count());
         }
 
+        if (isset($this->pages[$offset])) {
+            return $this->pages[$offset];
+        }
+
         list($itemOffset, $length) = $this->strategy->getLimit($this->adapter, $offset);
 
-        return new Page($this->adapter, $offset, $itemOffset, $length);
+        return $this->pages[$offset] = new Page($this->adapter, $offset, $itemOffset, $length);
     }
 
     /**

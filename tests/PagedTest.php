@@ -83,6 +83,19 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $page->getIterator();
     }
 
+    public function testOffsetGetReturnsSameInstance()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+        $strategy->method('getLimit')->willReturn(array(10, 5));
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItemCount')->willReturn(15);
+
+        $pages = new Paged($adapter, $strategy, 2);
+        $this->assertSame($pages[3], $pages[3]);
+    }
+
     public function testgetCurrentReturnsCurrentPage()
     {
         $strategy = $this->getMockStrategy();
