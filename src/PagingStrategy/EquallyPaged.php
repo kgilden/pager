@@ -22,25 +22,12 @@ use KG\Pager\PagingStrategyInterface;
 final class EquallyPaged implements PagingStrategyInterface
 {
     /**
-     * @var integer
-     */
-    private $perPage;
-
-    /**
-     * @param integer $perPage Number of items per page
-     */
-    public function __construct($perPage = 25)
-    {
-        $this->perPage = $perPage;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function getLimit(AdapterInterface $adapter, $page)
+    public function getLimit(AdapterInterface $adapter, $page, $perPage)
     {
-        $offset = ($page - 1) * $this->perPage;
-        $length = $this->perPage;
+        $offset = ($page - 1) * $perPage;
+        $length = $perPage;
 
         return array($offset, $length);
     }
@@ -48,9 +35,9 @@ final class EquallyPaged implements PagingStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function getCount(AdapterInterface $adapter)
+    public function getCount(AdapterInterface $adapter, $page, $perPage)
     {
-        $count = (int) ceil($adapter->getItemCount() / $this->perPage);
+        $count = (int) ceil($adapter->getItemCount() / $perPage);
 
         if (0 === $count) {
             // $count is 0, if no elements were found. In that case the number

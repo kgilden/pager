@@ -18,10 +18,19 @@ namespace KG\Pager;
 interface PagerInterface
 {
     /**
+     * Splits the items into multiple pages. `$page` is the 1-indexed page to
+     * be retrieved. `$itemsPerPage` specifies how many items should be returned
+     * on a single page.
+     *
+     * Concrete implementors MAY use their own methods to determine `$page`
+     * and `$itemsPerPage` automatically. However, the arguments explicitly
+     * passed must take precedence over any implicit solutions.
+     *
      * @param AdapterInterface $adapter
-     * @param integer|null     $page    1-indexed current page (behavior for null is implementation-specific)
+     * @param integer|null     $page
+     * @param integer<null     $itemsPerPage
      *
      * @return PagedInterface
      */
-    public function paginate(AdapterInterface $adapter, $page = null);
+    public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null);
 }

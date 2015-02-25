@@ -31,20 +31,18 @@ final class Pager implements PagerInterface
     /**
      * Creates a new pager with the default "equally paged" strategy.
      *
-     * @param integer $perPage
-     *
      * @return Pager
      */
-    public static function create($perPage = 25)
+    public static function create()
     {
-        return new static(new EquallyPaged($perPage));
+        return new static(new EquallyPaged());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $page = null)
+    public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null)
     {
-        return new Paged($adapter, $this->strategy, $page ?: 1);
+        return new Paged($adapter, $this->strategy, $page ?: 1, $itemsPerPage ?: 25);
     }
 }

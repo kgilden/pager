@@ -22,8 +22,8 @@ use KG\Pager\Adapter\ArrayAdapter;
 
 $list = array('apple', 'banana', 'cucumber', 'dragonfruit', 'eggplant');
 
-$pager = Pager::create(2 /* items per page */);
-$pages = $pager->paginate(new ArrayAdapter($list), 3 /* current page */);
+$pager = Pager::create();
+$pages = $pager->paginate(new ArrayAdapter($list), 3 /* current page */, 2 /* items per page */);
 
 count($pages); // 3 - total number of pages
 
@@ -55,7 +55,7 @@ use KG\Pager\Pager;
 use KG\Pager\Strategy\EquallyPaged;
 
 // Using the default strategy
-$pager = new Pager(new EquallyPaged(5 /* items per page */));
+$pager = new Pager(new EquallyPaged());
 
 ?>
 ```

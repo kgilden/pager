@@ -23,8 +23,8 @@ class EquallyPagedTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn($itemCount);
 
-        $strategy = new EquallyPaged($perPage);
-        $this->assertEquals($expectedCount, $strategy->getCount($adapter));
+        $strategy = new EquallyPaged();
+        $this->assertEquals($expectedCount, $strategy->getCount($adapter, 1, $perPage));
     }
 
     public function getTestDataForCount()
@@ -43,8 +43,8 @@ class EquallyPagedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLimit($perPage, $page, $expectedLimit)
     {
-        $strategy = new EquallyPaged($perPage);
-        $this->assertEquals($expectedLimit, $strategy->getLimit($this->getMockAdapter(), $page));
+        $strategy = new EquallyPaged();
+        $this->assertEquals($expectedLimit, $strategy->getLimit($this->getMockAdapter(), $page, $perPage));
     }
 
     public function getTestDataForLimit()

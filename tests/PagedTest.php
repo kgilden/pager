@@ -27,7 +27,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(42);
         ;
 
-        $this->assertCount(42, new Paged($adapter, $strategy, 1));
+        $this->assertCount(42, new Paged($adapter, $strategy, 1, 25));
     }
 
     public function testCallbacksApplied()
@@ -38,7 +38,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
 
-        $pages = new Paged($adapter, $strategy, 1);
+        $pages = new Paged($adapter, $strategy, 1, 25);
         $pages->callback(function (array $items) {
             return array_map(function ($item) { return $item * 4; }, $items);
         });
@@ -51,7 +51,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMockStrategy();
         $strategy->method('getCount')->willReturn(2);
 
-        $pages = new Paged($this->getMockAdapter(), $strategy, 1);
+        $pages = new Paged($this->getMockAdapter(), $strategy, 1, 25);
         $this->assertFalse(isset($pages[0]));
     }
 
@@ -60,7 +60,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMockStrategy();
         $strategy->method('getCount')->willReturn(2);
 
-        $pages = new Paged($this->getMockAdapter(), $strategy, 1);
+        $pages = new Paged($this->getMockAdapter(), $strategy, 1, 25);
         $this->assertTrue(isset($pages[2]));
     }
 
@@ -69,7 +69,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMockStrategy();
         $strategy->method('getCount')->willReturn(2);
 
-        $pages = new Paged($this->getMockAdapter(), $strategy, 1);
+        $pages = new Paged($this->getMockAdapter(), $strategy, 1, 25);
         $this->assertFalse(isset($pages[3]));
     }
 
@@ -82,7 +82,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(15);
 
-        $pages = new Paged($adapter, $strategy, 2);
+        $pages = new Paged($adapter, $strategy, 2, 5);
         $this->assertInstanceOf('KG\Pager\PageInterface', $page = $pages[3]);
 
         // Starting to kind of test the page implementation here, but it's the
@@ -108,7 +108,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(15);
 
-        $pages = new Paged($adapter, $strategy, 2);
+        $pages = new Paged($adapter, $strategy, 2, 5);
         $this->assertSame($pages[3], $pages[3]);
     }
 
@@ -124,7 +124,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
 
-        $pages = new Paged($adapter, $strategy, 1);
+        $pages = new Paged($adapter, $strategy, 1, 2);
 
         $page = $pages[3]->getIterator(); // Should cache page 3.
 
@@ -140,7 +140,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMockStrategy();
         $strategy->method('getCount')->willReturn(2);
 
-        $pages = new Paged($this->getMockAdapter(), $strategy, 2);
+        $pages = new Paged($this->getMockAdapter(), $strategy, 2, 2);
         $this->assertEquals(2, $pages->getCurrent()->getNumber());
     }
 
@@ -154,7 +154,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMockStrategy();
         $strategy->method('getCount')->willReturn(3);
 
-        $pages = new Paged($this->getMockAdapter(), $strategy, 2);
+        $pages = new Paged($this->getMockAdapter(), $strategy, 2, 2);
         $pages[$page];
     }
 
@@ -171,7 +171,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotSetPages()
     {
-        $pages = new Paged($this->getMockAdapter(), $this->getMockStrategy(), 1);
+        $pages = new Paged($this->getMockAdapter(), $this->getMockStrategy(), 1, 2);
         $pages[0] = 'foo';
     }
 
@@ -180,7 +180,7 @@ class PagedTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotUnsetPages()
     {
-        $pages = new Paged($this->getMockAdapter(), $this->getMockStrategy(), 1);
+        $pages = new Paged($this->getMockAdapter(), $this->getMockStrategy(), 1, 2);
         unset($pages[0]);
     }
 

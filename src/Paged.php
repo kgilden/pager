@@ -32,6 +32,11 @@ final class Paged implements PagedInterface
     private $page;
 
     /**
+     * @var integer
+     */
+    private $perPage;
+
+    /**
      * A list of pages which have been fetched from the adapter (no point in
      * asking for the same page more than once).
      *
@@ -43,12 +48,14 @@ final class Paged implements PagedInterface
      * @param AdapterInterface        $adapter
      * @param PagingStrategyInterface $strategy
      * @param integer                 $page     Current page
+     * @param integer                 $perPage  Number of items per page
      */
-    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $page)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $page, $perPage)
     {
         $this->adapter = $adapter;
         $this->strategy = $strategy;
         $this->page = $page;
+        $this->perPage = $perPage;
     }
 
     /**
@@ -56,7 +63,7 @@ final class Paged implements PagedInterface
      */
     public function count()
     {
-        return $this->strategy->getCount($this->adapter);
+        return $this->strategy->getCount($this->adapter, $this->page, $this->perPage);
     }
 
     /**
@@ -103,7 +110,7 @@ final class Paged implements PagedInterface
             return $this->pages[$offset];
         }
 
-        list($itemOffset, $length) = $this->strategy->getLimit($this->adapter, $offset);
+        list($itemOffset, $length) = $this->strategy->getLimit($this->adapter, $offset, $this->perPage);
 
         return $this->pages[$offset] = new Page($this->adapter, $offset, $itemOffset, $length);
     }

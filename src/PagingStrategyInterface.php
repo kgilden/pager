@@ -21,15 +21,18 @@ interface PagingStrategyInterface
     /**
      * @param AdapterInterface $adapter
      * @param integer          $page
+     * @param integer          $perPage
      *
      * @return array An array containing offset & length
      */
-    public function getLimit(AdapterInterface $adapter, $page);
+    public function getLimit(AdapterInterface $adapter, $page, $perPage);
 
     /**
      * @param AdapterInterface $adapter
+     * @param integer          $page
+     * @param integer          $perPage
      *
      * @return integer Total number of pages
      */
-    public function getCount(AdapterInterface $adapter);
+    public function getCount(AdapterInterface $adapter, $page, $perPage);
 }
