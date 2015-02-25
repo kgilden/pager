@@ -15,19 +15,16 @@ use KG\Pager\Pager;
 
 class PagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPaginateGetsPaged()
+    public function testPaginateGetsPage()
     {
         $pager = new Pager();
-        $this->assertInstanceOf('KG\Pager\PagedInterface', $pager->paginate($this->getMockAdapter()));
+        $this->assertInstanceOf('KG\Pager\PageInterface', $pager->paginate($this->getMockAdapter()));
     }
 
     public function testPagerGetsFirstPageByDefault()
     {
         $pager = new Pager();
-        $page = $pager
-            ->paginate($this->getMockAdapter())
-            ->getCurrent()
-        ;
+        $page = $pager->paginate($this->getMockAdapter());
 
         $this->assertTrue($page->isFirst());
     }

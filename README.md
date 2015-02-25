@@ -23,20 +23,15 @@ use KG\Pager\Adapter\ArrayAdapter;
 $list = array('apple', 'banana', 'cucumber', 'dragonfruit', 'eggplant');
 
 $pager = new Pager();
-$pages = $pager->paginate(new ArrayAdapter($list), 3 /* current page */, 2 /* items per page */);
+$page = $pager->paginate(new ArrayAdapter($list), 3 /* current page */, 2 /* items per page */);
 
-count($pages); // 3 - total number of pages
+$page->isFirst(); // false
+$page->isLast(); // true - there's a total of 3 pages
+$page->getNumber(); // 3 - as specified when paging
 
-$pages[1]->isFirst(); // true - $pages is a 1-indexed list of pages
-$pages[3]->isLast(); // true
-
-$current = $pages->getCurrent();
-$current->getNumber(); // 3 - as specified when creating the pages
-$current === $pages[3]; // true
-count($current); // 1, because there's only 1 remaining element on the last page
-
-// Only here are the elements actually fetched.
-array_values($current); // "eggplant"
+// Only now are the elements actually fetched.
+count($page); // 1
+iterator_to_array($page->getIterator()); // ["eggplant"]
 
 ?>
 ```
@@ -62,7 +57,7 @@ $pager = new Pager(new EquallyPaged());
 
 ### Callbacks
 
-Callbacks are used to modify paged items. They're added to paged objects and
+Callbacks are used to modify paged items. They're added to page objects and
 are applied whenever the items are fetched for the first time. The only
 requirement is that the callback must return exactly as many items as were
 passed to it.
@@ -74,7 +69,7 @@ use KG\Pager\Pager;
 use KG\Pager\Adapter\ArrayAdapter;
 
 $pager = new Pager();
-$pages = $pager
+$page = $pager
     ->paginate(new ArrayAdapter(array(1, 2)))
     ->callback(function (array $items) {
         foreach ($items as $key => $item) {
@@ -85,7 +80,7 @@ $pages = $pager
     })
 ;
 
-iterator_to_array($pages[1]->getIterator()); // [2, 4]
+iterator_to_array($page->getIterator()); // [2, 4]
 
 ?>
 ```

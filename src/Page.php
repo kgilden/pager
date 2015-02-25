@@ -11,6 +11,8 @@
 
 namespace KG\Pager;
 
+use KG\Pager\Adapter\CallbackDecorator;
+
 final class Page implements PageInterface
 {
     /**
@@ -120,5 +122,15 @@ final class Page implements PageInterface
     public function getItemCount()
     {
         return $this->itemCount ?: $this->itemCount = $this->adapter->getItemCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function callback($callback)
+    {
+        $adapter = new CallbackDecorator($this->adapter, $callback);
+
+        return new self($adapter, $this->strategy, $this->number, $this->offset, $this->length);
     }
 }

@@ -40,4 +40,16 @@ interface PageInterface extends \Countable, \IteratorAggregate
      * @return integer The total number of items found in the set
      */
     public function getItemCount();
+
+    /**
+     * Adds a callback to the page to be applied to all found items whenever
+     * an item is retrieved. The method must return a page containing the
+     * callback. This MAY be the current page object, but also a completely
+     * new object.
+     *
+     * @param \Callable $callback A callback to modify items of this page
+     *
+     * @return PageInterface
+     */
+    public function callback($callback);
 }

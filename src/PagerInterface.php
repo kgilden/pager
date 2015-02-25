@@ -30,7 +30,7 @@ interface PagerInterface
      * @param integer|null     $page
      * @param integer<null     $itemsPerPage
      *
-     * @return PagedInterface
+     * @return PageInterface
      */
     public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null);
 }

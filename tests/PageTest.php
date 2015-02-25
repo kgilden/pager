@@ -125,6 +125,22 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(15, $page->getItemCount());
     }
 
+    public function testCallbacksApplied()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
+
+        $page = new Page($adapter, $strategy, 5, 12, 4);
+        $page = $page->callback(function (array $items) {
+            return array_map(function ($item) { return $item * 2; }, $items);
+        });
+
+        $this->assertEquals(array(4, 8), iterator_to_array($page->getIterator()));
+    }
+
     private function getMockAdapter()
     {
         return $this->getMock('KG\Pager\AdapterInterface');
