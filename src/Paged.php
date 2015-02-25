@@ -112,7 +112,7 @@ final class Paged implements PagedInterface
 
         list($itemOffset, $length) = $this->strategy->getLimit($this->adapter, $offset, $this->perPage);
 
-        return $this->pages[$offset] = new Page($this->adapter, $offset, $itemOffset, $length);
+        return $this->pages[$offset] = new Page($this->adapter, $this->strategy, $offset, $itemOffset, $length);
     }
 
     /**

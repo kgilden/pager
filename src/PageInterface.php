@@ -30,4 +30,14 @@ interface PageInterface extends \Countable, \IteratorAggregate
      * @return boolean Whether it's the last page
      */
     public function isLast();
+
+    /**
+     * @return integer The total number of pages the set was split into
+     */
+    public function getPageCount();
+
+    /**
+     * @return integer The total number of items found in the set
+     */
+    public function getItemCount();
 }

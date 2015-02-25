@@ -19,6 +19,11 @@ final class Page implements PageInterface
     private $adapter;
 
     /**
+     * @var PagingStrategyInterface
+     */
+    private $strategy;
+
+    /**
      * @var integer
      */
     private $number;
@@ -42,14 +47,16 @@ final class Page implements PageInterface
      * Page number could be calculated from offset & length, but doing it this
      * way enables having pages with different number of items.
      *
-     * @param AdapterInterface $adapter
-     * @param integer          $number
-     * @param integer          $offset
-     * @param integer          $length
+     * @param AdapterInterface        $adapter
+     * @param PagingStrategyInterface $strategy
+     * @param integer                 $number
+     * @param integer                 $offset
+     * @param integer                 $length
      */
-    public function __construct(AdapterInterface $adapter, $number, $offset, $length)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $number, $offset, $length)
     {
         $this->adapter = $adapter;
+        $this->strategy = $strategy;
         $this->number = $number;
         $this->offset = $offset;
         $this->length = $length;
@@ -100,9 +107,17 @@ final class Page implements PageInterface
     }
 
     /**
-     * @return integer
+     * {@inheritDoc}
      */
-    private function getItemCount()
+    public function getPageCount()
+    {
+        return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->count());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getItemCount()
     {
         return $this->itemCount ?: $this->itemCount = $this->adapter->getItemCount();
     }
