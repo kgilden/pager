@@ -67,6 +67,12 @@ class DqlAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $adapter->getItems(10, 2));
     }
 
+    public function testFromQuery()
+    {
+        $query = $this->getMockQuery();
+        $adapter = DqlAdapter::fromQuery($query);
+    }
+
     private function getMockPaginator()
     {
         return $this
