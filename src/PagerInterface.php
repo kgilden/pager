@@ -12,7 +12,7 @@
 namespace KG\Pager;
 
 /**
- * Pager acts as a factory to create PagedInterface objects (i.e. to split
+ * Pager acts as a factory to create PageInterface objects (i.e. to split
  * results into multiple pages).
  */
 interface PagerInterface

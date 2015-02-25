@@ -31,14 +31,19 @@ final class Page implements PageInterface
     private $number;
 
     /**
-     * @var integer
+     * @var integer|null
      */
     private $offset;
 
     /**
-     * @var integer
+     * @var integer|null
      */
     private $length;
+
+    /**
+     * @var integer
+     */
+    private $perPage;
 
     /**
      * @var integer|null
@@ -52,16 +57,14 @@ final class Page implements PageInterface
      * @param AdapterInterface        $adapter
      * @param PagingStrategyInterface $strategy
      * @param integer                 $number
-     * @param integer                 $offset
-     * @param integer                 $length
+     * @param integer                 $perPage
      */
-    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $number, $offset, $length)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $number, $perPage)
     {
         $this->adapter = $adapter;
         $this->strategy = $strategy;
         $this->number = $number;
-        $this->offset = $offset;
-        $this->length = $length;
+        $this->perPage = $perPage;
     }
 
     /**
@@ -77,7 +80,7 @@ final class Page implements PageInterface
      */
     public function isFirst()
     {
-        return 0 === $this->offset;
+        return 0 === $this->getOffset();
     }
 
     /**
@@ -85,7 +88,7 @@ final class Page implements PageInterface
      */
     public function isLast()
     {
-        return ($this->offset + $this->length) >= $this->getItemCount();
+        return ($this->getOffset() + $this->getLength()) >= $this->getItemCount();
     }
 
     /**
@@ -93,11 +96,11 @@ final class Page implements PageInterface
      */
     public function count()
     {
-        $itemCount = $this->getItemCount() - $this->offset;
+        $itemCount = $this->getItemCount() - $this->getOffset();
 
         // It's either the maximum number of allowed items for this page or
         // remaining number of items.
-        return $itemCount > $this->length ? $this->length : $itemCount;
+        return $itemCount > $this->getLength() ? $this->getLength() : $itemCount;
     }
 
     /**
@@ -105,7 +108,7 @@ final class Page implements PageInterface
      */
     public function getIterator()
     {
-        return $this->adapter->getItems($this->offset, $this->length);
+        return $this->adapter->getItems($this->getOffset(), $this->getLength());
     }
 
     /**
@@ -113,7 +116,7 @@ final class Page implements PageInterface
      */
     public function getPageCount()
     {
-        return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->count());
+        return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->perPage);
     }
 
     /**
@@ -131,6 +134,40 @@ final class Page implements PageInterface
     {
         $adapter = new CallbackDecorator($this->adapter, $callback);
 
-        return new self($adapter, $this->strategy, $this->number, $this->offset, $this->length);
+        return new self($adapter, $this->strategy, $this->number, $this->perPage);
+    }
+
+    /**
+     * @return integer
+     */
+    private function getOffset()
+    {
+        if (!$this->offset) {
+            list($this->offset, $this->length) = $this->getLimit();
+        }
+
+        return $this->offset;
+    }
+
+    /**
+     * @return integer
+     */
+    private function getLength()
+    {
+        if (!$this->length) {
+            list($this->offset, $this->length) = $this->getLimit();
+        }
+
+        return $this->length;
+    }
+
+    /**
+     * @see PagingStrategyInterface::getLimit()
+     *
+     * @return integer[]
+     */
+    private function getLimit()
+    {
+        return $this->strategy->getLimit($this->adapter, $this->getNumber(), $this->perPage);
     }
 }

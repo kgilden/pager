@@ -17,37 +17,49 @@ class PageTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetNumber()
     {
-        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 2, 4, 4);
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 2, 4);
         $this->assertEquals(2, $page->getNumber());
     }
 
     public function testIsFirstIfOffsetZero()
     {
-        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 1, 0, 5);
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(0, 5));
+
+        $page = new Page($this->getMockAdapter(), $strategy, 1, 5);
         $this->assertTrue($page->isFirst());
     }
 
     public function testIsNotFirstIfOffsetNotZero()
     {
-        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 3, 10, 5);
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(10, 5));
+
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 3, 5);
         $this->assertFalse($page->isFirst());
     }
 
     public function testIsLastPageIfNoRemainingItemsAfterThisPage()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(10, 5));
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(15);
 
-        $page = new Page($adapter, $this->getMockStrategy(), 3, 10, 5);
+        $page = new Page($adapter, $strategy, 3, 5);
         $this->assertTrue($page->isLast());
     }
 
     public function testIsNotLastIfMoreItemsAfterThisPage()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(10, 5));
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(16);
 
-        $page = new Page($adapter, $this->getMockStrategy(), 3, 10, 5);
+        $page = new Page($adapter, $strategy, 3, 5);
         $this->assertFalse($page->isLast());
     }
 
@@ -57,10 +69,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function testCountEqualsLimitIfNotLastPage()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(0, 4));
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(7);
 
-        $page = new Page($adapter, $this->getMockStrategy(), 1, 0, 4);
+        $page = new Page($adapter, $strategy, 1, 4);
         $this->assertCount(4, $page);
     }
 
@@ -69,20 +84,26 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function testCountOfLastPageLessThanLimitIfNoRemainingItems()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(4, 4));
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItemCount')->willReturn(7);
 
-        $page = new Page($adapter, $this->getMockStrategy(), 2, 4, 4);
+        $page = new Page($adapter, $strategy, 2, 4);
         $this->assertCount(3, $page);
     }
 
     public function testIsTraversable()
     {
-        $this->assertInstanceOf('Traversable', new Page($this->getMockAdapter(), $this->getMockStrategy(), 3, 6, 3));
+        $this->assertInstanceOf('Traversable', new Page($this->getMockAdapter(), $this->getMockStrategy(), 3, 3));
     }
 
     public function testGetIteratorDelegatesToAdapter()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(9, 3));
+
         $adapter = $this->getMockAdapter();
         $adapter
             ->expects($this->once())
@@ -91,7 +112,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($expected = new \ArrayIterator(array(1, 2, 3)))
         ;
 
-        $page = new Page($adapter, $this->getMockStrategy(), 4, 9, 3);
+        $page = new Page($adapter, $strategy, 4, 3);
         $this->assertSame($expected, $page->getIterator());
     }
 
@@ -108,7 +129,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->willReturn(5)
         ;
 
-        $page = new Page($adapter, $strategy, 4, 9, 3);
+        $page = new Page($adapter, $strategy, 4, 3);
         $this->assertEquals(5, $page->getPageCount());
     }
 
@@ -121,7 +142,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->willReturn(15)
         ;
 
-        $page = new Page($adapter, $this->getMockStrategy(), 5, 12, 4);
+        $page = new Page($adapter, $this->getMockStrategy(), 5, 4);
         $this->assertEquals(15, $page->getItemCount());
     }
 
@@ -133,7 +154,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMockAdapter();
         $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
 
-        $page = new Page($adapter, $strategy, 5, 12, 4);
+        $page = new Page($adapter, $strategy, 5, 4);
         $page = $page->callback(function (array $items) {
             return array_map(function ($item) { return $item * 2; }, $items);
         });

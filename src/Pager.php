@@ -36,8 +36,6 @@ final class Pager implements PagerInterface
      */
     public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null)
     {
-        $pages = new Paged($adapter, $this->strategy, $page ?: 1, $itemsPerPage ?: 25);
-
-        return $pages->getCurrent();
+        return new Page($adapter, $this->strategy, $page ?: 1, $itemsPerPage ?: 25);
     }
 }
