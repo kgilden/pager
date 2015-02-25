@@ -22,7 +22,7 @@ use KG\Pager\Adapter\ArrayAdapter;
 
 $list = array('apple', 'banana', 'cucumber', 'dragonfruit', 'eggplant');
 
-$pager = Pager::create();
+$pager = new Pager();
 $pages = $pager->paginate(new ArrayAdapter($list), 3 /* current page */, 2 /* items per page */);
 
 count($pages); // 3 - total number of pages
@@ -73,7 +73,8 @@ passed to it.
 use KG\Pager\Pager;
 use KG\Pager\Adapter\ArrayAdapter;
 
-$pages = Pager::create()
+$pager = new Pager();
+$pages = $pager
     ->paginate(new ArrayAdapter(array(1, 2)))
     ->callback(function (array $items) {
         foreach ($items as $key => $item) {

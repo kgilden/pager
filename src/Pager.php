@@ -21,21 +21,14 @@ final class Pager implements PagerInterface
     private $strategy;
 
     /**
-     * @param PagingStrategyInterface $strategy
+     * Creates a new pager. Default strategy "equally paged" is used, if a
+     * strategy is not specified.
+     *
+     * @param PagingStrategyInterface|null $strategy
      */
-    public function __construct(PagingStrategyInterface $strategy)
+    public function __construct(PagingStrategyInterface $strategy = null)
     {
         $this->strategy = $strategy ?: new EquallyPaged();
-    }
-
-    /**
-     * Creates a new pager with the default "equally paged" strategy.
-     *
-     * @return Pager
-     */
-    public static function create()
-    {
-        return new static(new EquallyPaged());
     }
 
     /**

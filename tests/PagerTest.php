@@ -17,13 +17,13 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testPaginateGetsPaged()
     {
-        $pager = Pager::create();
+        $pager = new Pager();
         $this->assertInstanceOf('KG\Pager\PagedInterface', $pager->paginate($this->getMockAdapter()));
     }
 
     public function testPagerGetsFirstPageByDefault()
     {
-        $pager = Pager::create();
+        $pager = new Pager();
         $page = $pager
             ->paginate($this->getMockAdapter())
             ->getCurrent()
