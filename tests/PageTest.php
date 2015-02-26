@@ -15,6 +15,23 @@ use KG\Pager\Page;
 
 class PageTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetItemsDelegatesToAdapter()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(9, 3));
+
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->expects($this->once())
+            ->method('getItems')
+            ->with(9, 3)
+            ->willReturn($expected = array(1, 2, 3))
+        ;
+
+        $page = new Page($adapter, $strategy, 4, 3);
+        $this->assertSame($expected, $page->getItems());
+    }
+
     public function testGetNumber()
     {
         $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 2, 4);
@@ -63,59 +80,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($page->isLast());
     }
 
-    /**
-     * 7 items in total, given a limit of 4 items per page, there should be 4
-     * items on the first page.
-     */
-    public function testCountEqualsLimitIfNotLastPage()
-    {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getLimit')->willReturn(array(0, 4));
-
-        $adapter = $this->getMockAdapter();
-        $adapter->method('getItemCount')->willReturn(7);
-
-        $page = new Page($adapter, $strategy, 1, 4);
-        $this->assertCount(4, $page);
-    }
-
-    /**
-     * 7 items in total, 4 on the first page and thus 3 on the second page.
-     */
-    public function testCountOfLastPageLessThanLimitIfNoRemainingItems()
-    {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getLimit')->willReturn(array(4, 4));
-
-        $adapter = $this->getMockAdapter();
-        $adapter->method('getItemCount')->willReturn(7);
-
-        $page = new Page($adapter, $strategy, 2, 4);
-        $this->assertCount(3, $page);
-    }
-
-    public function testIsTraversable()
-    {
-        $this->assertInstanceOf('Traversable', new Page($this->getMockAdapter(), $this->getMockStrategy(), 3, 3));
-    }
-
-    public function testGetIteratorDelegatesToAdapter()
-    {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getLimit')->willReturn(array(9, 3));
-
-        $adapter = $this->getMockAdapter();
-        $adapter
-            ->expects($this->once())
-            ->method('getItems')
-            ->with(9, 3)
-            ->willReturn($expected = new \ArrayIterator(array(1, 2, 3)))
-        ;
-
-        $page = new Page($adapter, $strategy, 4, 3);
-        $this->assertSame($expected, $page->getIterator());
-    }
-
     public function testGetPageCountDelegatedToStrategy()
     {
         $adapter = $this->getMockAdapter();
@@ -152,14 +116,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $strategy->method('getCount')->willReturn(3);
 
         $adapter = $this->getMockAdapter();
-        $adapter->method('getItems')->willReturn(new \ArrayIterator(array(2, 4)));
+        $adapter->method('getItems')->willReturn(array(2, 4));
 
         $page = new Page($adapter, $strategy, 5, 4);
         $page = $page->callback(function (array $items) {
             return array_map(function ($item) { return $item * 2; }, $items);
         });
 
-        $this->assertEquals(array(4, 8), iterator_to_array($page->getIterator()));
+        $this->assertEquals(array(4, 8), $page->getItems());
     }
 
     private function getMockAdapter()

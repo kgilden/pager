@@ -79,6 +79,6 @@ final class DqlAdapter implements AdapterInterface
             ->setMaxResults($limit)
         ;
 
-        return $this->paginator->getIterator();
+        return iterator_to_array($this->paginator->getIterator());
     }
 }

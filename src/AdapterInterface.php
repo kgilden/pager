@@ -30,7 +30,7 @@ interface AdapterInterface
      * @param integer $offset Index of the 1-st item to be returned
      * @param integer $limit  Maximum number of items to return
      *
-     * @return \Traversable A traversable object containing the items
+     * @return array Items for the given offset and limit
      */
     public function getItems($offset, $limit);
 }

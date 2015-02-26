@@ -70,6 +70,14 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
+    public function getItems()
+    {
+        return $this->adapter->getItems($this->getOffset(), $this->getLength());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getNumber()
     {
         return $this->number;
@@ -89,26 +97,6 @@ final class Page implements PageInterface
     public function isLast()
     {
         return ($this->getOffset() + $this->getLength()) >= $this->getItemCount();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function count()
-    {
-        $itemCount = $this->getItemCount() - $this->getOffset();
-
-        // It's either the maximum number of allowed items for this page or
-        // remaining number of items.
-        return $itemCount > $this->getLength() ? $this->getLength() : $itemCount;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
-    {
-        return $this->adapter->getItems($this->getOffset(), $this->getLength());
     }
 
     /**

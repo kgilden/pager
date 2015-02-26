@@ -30,8 +30,8 @@ $page->isLast(); // true - there's a total of 3 pages
 $page->getNumber(); // 3 - as specified when paging
 
 // Only now are the elements actually fetched.
-count($page); // 1
-iterator_to_array($page->getIterator()); // ["eggplant"]
+count($page->getItems()); // 1
+$page->getItems(); // ["eggplant"]
 
 ?>
 ```
@@ -80,7 +80,7 @@ $page = $pager
     })
 ;
 
-iterator_to_array($page->getIterator()); // [2, 4]
+$page->getItems(); // [2, 4]
 
 ?>
 ```

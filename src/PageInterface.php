@@ -14,8 +14,13 @@ namespace KG\Pager;
 /**
  * Represents a single page of results.
  */
-interface PageInterface extends \Countable, \IteratorAggregate
+interface PageInterface
 {
+    /**
+     * @return array The items of this page
+     */
+    public function getItems();
+
     /**
      * @return integer 1-indexed number of this page within the page collection
      */
@@ -37,7 +42,7 @@ interface PageInterface extends \Countable, \IteratorAggregate
     public function getPageCount();
 
     /**
-     * @return integer The total number of items found in the set
+     * @return integer The total number of items across all pages
      */
     public function getItemCount();
 

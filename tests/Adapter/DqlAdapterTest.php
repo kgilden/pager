@@ -60,7 +60,7 @@ class DqlAdapterTest extends \PHPUnit_Framework_TestCase
         $paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn($expected = new \ArrayIterator(array('foo', 'bar')))
+            ->willReturn(new \ArrayIterator($expected = array('foo', 'bar')))
         ;
 
         $adapter = new DqlAdapter($paginator);

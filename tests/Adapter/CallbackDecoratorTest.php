@@ -33,14 +33,14 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $adapter
             ->method('getItems')
             ->with(0, 2)
-            ->willReturn(new \ArrayIterator(array(2, 4)))
+            ->willReturn(array(2, 4))
         ;
 
         $decorator = new CallbackDecorator($adapter, function (array $items) {
             return array_map(function ($item) { return $item * 2; }, $items);
         });
 
-        $this->assertEquals(array(4, 8), iterator_to_array($decorator->getItems(0, 2)));
+        $this->assertEquals(array(4, 8), $decorator->getItems(0, 2));
     }
 
     public function testMultipleCallbacksAppliedInOrder()
@@ -49,7 +49,7 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $adapter
             ->method('getItems')
             ->with(0, 2)
-            ->willReturn(new \ArrayIterator(array(2, 4)))
+            ->willReturn(array(2, 4))
         ;
 
         $addFn = function (array $items) {
@@ -63,7 +63,7 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $decorator = new CallbackDecorator($adapter, $addFn);
         $decorator = new CallbackDecorator($decorator, $mulFn);
 
-        $this->assertEquals(array(8, 12), iterator_to_array($decorator->getItems(0, 2)));
+        $this->assertEquals(array(8, 12), $decorator->getItems(0, 2));
     }
 
     private function getMockAdapter()

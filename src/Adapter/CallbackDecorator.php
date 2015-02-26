@@ -60,12 +60,12 @@ final class CallbackDecorator implements AdapterInterface
      */
     public function getItems($offset, $limit)
     {
-        $items = iterator_to_array($this->adapter->getItems($offset, $limit));
+        $items = $this->adapter->getItems($offset, $limit);
 
         foreach ($this->callbacks as $callback) {
             $items = call_user_func($callback, $items);
         }
 
-        return new \ArrayIterator($items);
+        return $items;
     }
 }
