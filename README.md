@@ -85,6 +85,18 @@ $page->getItems(); // [2, 4]
 ?>
 ```
 
+### Avoiding expensive count queries
+
+On bigger result sets it might be prohibitively expensive to count the total
+number of items. The pager won't use adapter's count method by sticking to the
+following methods:
+
+    - Page::isFirst()
+    - Page::isLast()
+    - Page::getItems()
+    - Page::getNumber()
+    - Page::callback()
+
 Installation
 ------------
 
