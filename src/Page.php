@@ -26,6 +26,13 @@ final class Page implements PageInterface
     private $strategy;
 
     /**
+     * Items of this page + potentially 1 extra item from the next page.
+     *
+     * @var array
+     */
+    private $itemsWithOneExtra;
+
+    /**
      * @var integer
      */
     private $number;
@@ -72,7 +79,7 @@ final class Page implements PageInterface
      */
     public function getItems()
     {
-        return $this->adapter->getItems($this->getOffset(), $this->getLength());
+        return array_slice($this->getItemsWithOneExtra(), 0, $this->getLength());
     }
 
     /**
@@ -96,7 +103,7 @@ final class Page implements PageInterface
      */
     public function isLast()
     {
-        return ($this->getOffset() + $this->getLength()) >= $this->getItemCount();
+        return count($this->getItemsWithOneExtra()) <= $this->getLength();
     }
 
     /**
@@ -157,5 +164,24 @@ final class Page implements PageInterface
     private function getLimit()
     {
         return $this->strategy->getLimit($this->adapter, $this->getNumber(), $this->perPage);
+    }
+
+    /**
+     * Gets items of this page as well as the 1-st item from the next page.
+     * Doing it this way keeps us from having to run the expensive total item
+     * count query in some scenarios.
+     *
+     * @return array
+     */
+    private function getItemsWithOneExtra()
+    {
+        if (!$this->itemsWithOneExtra) {
+            $this->itemsWithOneExtra = $this
+                ->adapter
+                ->getItems($this->getOffset(), $this->getLength() + 1)
+            ;
+        }
+
+        return $this->itemsWithOneExtra;
     }
 }

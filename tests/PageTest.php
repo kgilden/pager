@@ -24,12 +24,28 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $adapter
             ->expects($this->once())
             ->method('getItems')
-            ->with(9, 3)
             ->willReturn($expected = array(1, 2, 3))
         ;
 
         $page = new Page($adapter, $strategy, 4, 3);
         $this->assertSame($expected, $page->getItems());
+    }
+
+    public function testExtraItemFetched()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn(array(9, 3));
+
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->expects($this->once())
+            ->method('getItems')
+            ->with(9, 4)
+            ->willReturn(array(1, 2, 3, 4))
+        ;
+
+        $page = new Page($adapter, $strategy, 4, 3);
+        $this->assertCount(3, $page->getItems(), 'Page may not expose the extra item.');
     }
 
     public function testGetNumber()
@@ -62,7 +78,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $strategy->method('getLimit')->willReturn(array(10, 5));
 
         $adapter = $this->getMockAdapter();
-        $adapter->method('getItemCount')->willReturn(15);
+        $adapter->method('getItems')->willReturn(array_fill(0, 5, null));
 
         $page = new Page($adapter, $strategy, 3, 5);
         $this->assertTrue($page->isLast());
@@ -74,7 +90,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $strategy->method('getLimit')->willReturn(array(10, 5));
 
         $adapter = $this->getMockAdapter();
-        $adapter->method('getItemCount')->willReturn(16);
+        $adapter->method('getItems')->willReturn(array_fill(0, 6, null));
 
         $page = new Page($adapter, $strategy, 3, 5);
         $this->assertFalse($page->isLast());
