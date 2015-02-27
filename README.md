@@ -39,21 +39,26 @@ $page->getItems(); // ["eggplant"]
 ### Strategies
 
 There are several different strategies to split the results into pages. The
-simplest, "equally paged" strategy is used by default. However, more intricate
-strategies can be implemented. For example, the last two pages could be merged,
-if there are too few items on the last page.
+"equally paged" strategy is used by default.
 
 ```php
 <?php
 
 use KG\Pager\Pager;
 use KG\Pager\Strategy\EquallyPaged;
+use KG\Pager\Strategy\LastPageMerged;
 
-// Using the default strategy
-$pager = new Pager(new EquallyPaged());
+$pagerA = new Pager(new EquallyPaged());
+$pagerB = new Pager(new LastPageMerged(0.3333));
 
 ?>
 ```
+
+The following strategies are supported:
+
+    - `EquallyPaged` - split items equally between the pages;
+    - `LastPageMerged` - split items equally between the pages, but merge the
+      last two pages if there are too few items left dangling on the last page;
 
 ### Callbacks
 
