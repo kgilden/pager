@@ -56,9 +56,9 @@ $pagerB = new Pager(new LastPageMerged(0.3333));
 
 The following strategies are supported:
 
-    - `EquallyPaged` - split items equally between the pages;
-    - `LastPageMerged` - split items equally between the pages, but merge the
-      last two pages if there are too few items left dangling on the last page;
+- `EquallyPaged` - split items equally between the pages;
+- `LastPageMerged` - split items equally between the pages, but merge the
+  last two pages if there are too few items left dangling on the last page;
 
 ### Callbacks
 
