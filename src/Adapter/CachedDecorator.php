@@ -16,7 +16,7 @@ use KG\Pager\AdapterInterface;
 /**
  * Caches and attempts to minimize calls made to the wrapped adapter.
  */
-class CachedDecorator implements AdapterInterface
+final class CachedDecorator implements AdapterInterface
 {
     /**
      * @var AdapterInterface

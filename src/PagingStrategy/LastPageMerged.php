@@ -27,7 +27,7 @@ use KG\Pager\PagingStrategyInterface;
  * threshold, the strategy would tell the pager to merge the last two pages
  * leaving a total of 2 pages with 13 items on the last page.
  */
-class LastPageMerged implements PagingStrategyInterface
+final class LastPageMerged implements PagingStrategyInterface
 {
     /**
      * @var integer
