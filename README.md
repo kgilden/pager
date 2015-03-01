@@ -102,6 +102,28 @@ following methods:
     - Page::getNumber()
     - Page::callback()
 
+### Automatically detecting the current page from request
+
+The [symfony/http-foundation](https://packagist.org/packages/symfony/http-foundation)
+package is required for this feature. The pager can be wrapped by a special
+decorator, which gets the current page automatically from the given request
+
+```php
+<?php
+
+use KG\Pager\Pager;
+use KG\Pager\RequestDecorator;
+
+// Given http://example.com?page=3 & assuming there's a Symfony Request object
+// in the RequestStack object.
+$pager = new RequestDecorator(new Pager(), $requestStack);
+$page = $pager->paginate($adapter);
+
+$page->getNumber() // 3
+
+?>
+```
+
 Installation
 ------------
 
