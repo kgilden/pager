@@ -66,12 +66,12 @@ final class Page implements PageInterface
      * @param integer                 $number
      * @param integer                 $perPage
      */
-    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $number, $perPage)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $perPage, $number)
     {
         $this->adapter = $adapter;
         $this->strategy = $strategy;
-        $this->number = $number;
         $this->perPage = $perPage;
+        $this->number = $number;
     }
 
     /**

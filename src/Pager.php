@@ -35,8 +35,8 @@ final class Pager implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null)
+    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null)
     {
-        return new Page(new CachedDecorator($adapter), $this->strategy, $page ?: 1, $itemsPerPage ?: 25);
+        return new Page(new CachedDecorator($adapter), $this->strategy, $itemsPerPage ?: 25, $page ?: 1);
     }
 }

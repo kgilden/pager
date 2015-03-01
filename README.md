@@ -23,7 +23,7 @@ use KG\Pager\Adapter\ArrayAdapter;
 $list = array('apple', 'banana', 'cucumber', 'dragonfruit', 'eggplant');
 
 $pager = new Pager();
-$page = $pager->paginate(new ArrayAdapter($list), 3 /* current page */, 2 /* items per page */);
+$page = $pager->paginate(new ArrayAdapter($list), 2 /* items per page */, 3 /* current page */);
 
 $page->isFirst(); // false
 $page->isLast(); // true - there's a total of 3 pages

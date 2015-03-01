@@ -27,10 +27,10 @@ interface PagerInterface
      * passed must take precedence over any implicit solutions.
      *
      * @param AdapterInterface $adapter
+     * @param integer|null     $itemsPerPage
      * @param integer|null     $page
-     * @param integer<null     $itemsPerPage
      *
      * @return PageInterface
      */
-    public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null);
+    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null);
 }

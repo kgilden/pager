@@ -44,7 +44,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
         $pager = $this->getMockPager();
         $pager
             ->method('paginate')
-            ->with($this->anything(), 5)
+            ->with($this->anything(), $this->anything(), 5)
         ;
 
         $stack = $this->getMockRequestStack();
@@ -62,7 +62,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
         $pager = $this->getMockPager();
         $pager
             ->method('paginate')
-            ->with($this->anything(), 5)
+            ->with($this->anything(), $this->anything(), 5)
         ;
 
         $stack = $this->getMockRequestStack();
@@ -80,7 +80,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
         $pager = $this->getMockPager();
         $pager
             ->method('paginate')
-            ->with($this->anything(), 3)
+            ->with($this->anything(), $this->anything(), 3)
         ;
 
         $stack = $this->getMockRequestStack();
@@ -90,7 +90,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
         ;
 
         $decorated = new RequestDecorator($pager, $stack);
-        $decorated->paginate($this->getMockAdapter(), 3);
+        $decorated->paginate($this->getMockAdapter(), null, 3);
     }
 
     private function getMockAdapter()

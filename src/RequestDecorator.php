@@ -49,9 +49,9 @@ final class RequestDecorator implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $page = null, $itemsPerPage = null)
+    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null)
     {
-        return $this->pager->paginate($adapter, $page ?: $this->getCurrentPage(), $itemsPerPage);
+        return $this->pager->paginate($adapter, $itemsPerPage, $page ?: $this->getCurrentPage());
     }
 
     /**
