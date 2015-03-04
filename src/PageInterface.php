@@ -37,6 +37,11 @@ interface PageInterface
     public function isLast();
 
     /**
+     * @return boolean Whether this page is out of the paged range
+     */
+    public function isOutOfBounds();
+
+    /**
      * @return integer The total number of pages the set was split into
      */
     public function getPageCount();

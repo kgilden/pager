@@ -109,6 +109,14 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
+    public function isOutOfBounds()
+    {
+        return 0 < $this->getNumber() && $this->getNumber() <= $this->getPageCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getPageCount()
     {
         return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->perPage);

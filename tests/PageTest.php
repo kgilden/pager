@@ -96,6 +96,30 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($page->isLast());
     }
 
+    public function testIsOutOfBoundsIfNumberNonPositive()
+    {
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 5, 0);
+        $this->assertTrue($page->isOutOfBounds());
+    }
+
+    public function testIsOutOfBoundsifAbovePageCount()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $page = new Page($this->getMockAdapter(), $strategy, 5, 4);
+        $this->assertTrue($page->isOutOfBounds());
+    }
+
+    public function testIsNotOutOfBoundsIfPositiveAndBelowPageCount()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $page = new Page($this->getMockAdapter(), $strategy, 5, 3);
+        $this->assertFalse($page->isOutOfBounds());
+    }
+
     public function testGetPageCountDelegatedToStrategy()
     {
         $adapter = $this->getMockAdapter();
