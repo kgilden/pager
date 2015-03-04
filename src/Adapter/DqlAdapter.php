@@ -24,7 +24,8 @@ use KG\Pager\AdapterInterface;
  *     $pager->paginate(new DqlAdapter(new Paginator($query)));
  *
  * Be careful with using this adapter though: performance is abysmal for
- * sufficiently complex queries.
+ * sufficiently complex queries. You might want to use DqlByHandAdapter in
+ * such cases.
  */
 final class DqlAdapter implements AdapterInterface
 {
