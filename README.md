@@ -124,6 +124,31 @@ $page->getNumber() // 3
 ?>
 ```
 
+### Bounds checking
+
+By default no bounds checking is made. You can do it yourself by calling
+`Page::isOutOfBounds()` - it implies knowing the total item count, i.e. an
+expensive call might be made for that piece of information. A decorator can
+be used to throw exceptions for pages out of bounds.
+
+```php
+<?php
+
+use KG\Pager\BoundsCheckDecorator;
+use KG\Pager\Exception\OutOfBoundsException;
+use KG\Pager\Pager;
+
+$pager = new BoundsCheckDecorator(new Pager());
+
+try {
+    $pager->paginate($adapter, null, -5);
+} catch (OutOfBoundsException $e) {
+    printf('Page number %d is out of bounds\n', $e->getCurrentPage());
+}
+
+?>
+```
+
 Installation
 ------------
 

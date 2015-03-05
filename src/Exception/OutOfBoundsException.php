@@ -11,7 +11,7 @@
 
 namespace KG\Pager\Exception;
 
-class InvalidPageException extends \RuntimeException
+class OutOfBoundsException extends \RuntimeException
 {
     /**
      * @var integer
