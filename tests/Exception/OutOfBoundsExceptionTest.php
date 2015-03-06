@@ -24,9 +24,21 @@ class OutOfBoundsExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('The current page (5) is out of the paginated page range (10).', $e->getMessage());
     }
 
-    public function testCustomMessageOverridesDefault()
+    public function testRedirectKeySetByDefault()
+    {
+        $e = new OutOfBoundsException(5, 10);
+        $this->assertEquals('page', $e->getRedirectKey());
+    }
+
+    public function testCustomRedirectKeyCanBeUsed()
     {
         $e = new OutOfBoundsException(5, 10, 'foo');
+        $this->assertEquals('foo', $e->getRedirectKey());
+    }
+
+    public function testCustomMessageOverridesDefault()
+    {
+        $e = new OutOfBoundsException(5, 10, '', 'foo');
         $this->assertEquals('foo', $e->getMessage());
     }
 }

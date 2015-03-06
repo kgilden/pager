@@ -24,14 +24,21 @@ class OutOfBoundsException extends \RuntimeException
     private $pageCount;
 
     /**
+     * @var string
+     */
+    private $redirectKey;
+
+    /**
      * @param integer $currentPage
      * @param integer $pageCount
+     * @param string  $redirectKey
      * @param string  $message
      */
-    public function __construct($currentPage, $pageCount, $message = null)
+    public function __construct($currentPage, $pageCount, $redirectKey = 'page', $message = null)
     {
         $this->currentPage = $currentPage;
         $this->pageCount = $pageCount;
+        $this->redirectKey = $redirectKey;
 
         $message = $message ?: sprintf('The current page (%d) is out of the paginated page range (%d).', $currentPage, $pageCount);
 
@@ -52,5 +59,13 @@ class OutOfBoundsException extends \RuntimeException
     public function getPageCount()
     {
         return $this->pageCount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectKey()
+    {
+        return $this->redirectKey;
     }
 }

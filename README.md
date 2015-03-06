@@ -138,12 +138,13 @@ use KG\Pager\BoundsCheckDecorator;
 use KG\Pager\Exception\OutOfBoundsException;
 use KG\Pager\Pager;
 
-$pager = new BoundsCheckDecorator(new Pager());
+$pager = new BoundsCheckDecorator(new Pager(), 'custom_key');
 
 try {
     $pager->paginate($adapter, null, -5);
 } catch (OutOfBoundsException $e) {
-    printf('Page number %d is out of bounds\n', $e->getCurrentPage());
+    // Location: http://example.com?custom_key=1
+    header(sprintf('Location: http://example.com?%s=%s', $e->getRedirectKey(), 1));
 }
 
 ?>

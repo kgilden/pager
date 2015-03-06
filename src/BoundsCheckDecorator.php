@@ -26,11 +26,18 @@ final class BoundsCheckDecorator implements PagerInterface
     private $pager;
 
     /**
-     * @param PagerInterface $pager
+     * @var string
      */
-    public function __construct(PagerInterface $pager)
+    private $redirectKey;
+
+    /**
+     * @param PagerInterface $pager
+     * @param string         $redirectKey
+     */
+    public function __construct(PagerInterface $pager, $redirectKey = 'page')
     {
         $this->pager = $pager;
+        $this->redirectKey = $redirectKey;
     }
 
     /**
@@ -41,7 +48,7 @@ final class BoundsCheckDecorator implements PagerInterface
         $page = $this->pager->paginate($adapter, $itemsPerPage, $page);
 
         if ($page->isOutOfBounds()) {
-            throw new OutOfBoundsException($page->getNumber(), $page->getPageCount());
+            throw new OutOfBoundsException($page->getNumber(), $page->getPageCount(), $this->redirectKey);
         }
 
         return $page;
