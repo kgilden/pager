@@ -6,10 +6,10 @@ use KG\Pager\Exception\OutOfBoundsException;
 
 class OutOfBoundsExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testTestGetCurrentPage()
+    public function testTestGetPageNumber()
     {
         $e = new OutOfBoundsException(5, 10);
-        $this->assertEquals(5, $e->getCurrentPage());
+        $this->assertEquals(5, $e->getPageNumber());
     }
 
     public function testGetPageCount()

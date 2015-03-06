@@ -16,7 +16,7 @@ class OutOfBoundsException extends \RuntimeException
     /**
      * @var integer
      */
-    private $currentPage;
+    private $pageNumber;
 
     /**
      * @var integer
@@ -29,18 +29,18 @@ class OutOfBoundsException extends \RuntimeException
     private $redirectKey;
 
     /**
-     * @param integer $currentPage
+     * @param integer $pageNumber
      * @param integer $pageCount
      * @param string  $redirectKey
      * @param string  $message
      */
-    public function __construct($currentPage, $pageCount, $redirectKey = 'page', $message = null)
+    public function __construct($pageNumber, $pageCount, $redirectKey = 'page', $message = null)
     {
-        $this->currentPage = $currentPage;
+        $this->pageNumber = $pageNumber;
         $this->pageCount = $pageCount;
         $this->redirectKey = $redirectKey;
 
-        $message = $message ?: sprintf('The current page (%d) is out of the paginated page range (%d).', $currentPage, $pageCount);
+        $message = $message ?: sprintf('The current page (%d) is out of the paginated page range (%d).', $pageNumber, $pageCount);
 
         parent::__construct($message);
     }
@@ -48,9 +48,9 @@ class OutOfBoundsException extends \RuntimeException
     /**
      * @return integer
      */
-    public function getCurrentPage()
+    public function getPageNumber()
     {
-        return $this->currentPage;
+        return $this->pageNumber;
     }
 
     /**
