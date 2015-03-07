@@ -162,6 +162,17 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(15, $page->getItemCount());
     }
 
+    public function testDifferentPageAfterCallback()
+    {
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 5, 2);
+        $newPage = $page->callback(function ($items) { return $items; });
+
+        $this->assertNotSame($page, $newPage);
+
+        $this->assertEquals(2, $page->getNumber());
+        $this->assertEquals(2, $newPage->getNumber());
+    }
+
     public function testCallbacksApplied()
     {
         $strategy = $this->getMockStrategy();

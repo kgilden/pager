@@ -63,8 +63,8 @@ final class Page implements PageInterface
      *
      * @param AdapterInterface        $adapter
      * @param PagingStrategyInterface $strategy
-     * @param integer                 $number
      * @param integer                 $perPage
+     * @param integer                 $number
      */
     public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $perPage, $number)
     {
@@ -140,7 +140,7 @@ final class Page implements PageInterface
     {
         $adapter = new CallbackDecorator($this->adapter, $callback);
 
-        return new self($adapter, $this->strategy, $this->number, $this->perPage);
+        return new self($adapter, $this->strategy, $this->perPage, $this->number);
     }
 
     /**
