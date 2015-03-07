@@ -62,6 +62,39 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * This makes sure the decorator won't go asking for the same range of
+     * items again, if the first query returned nothing.
+     */
+    public function testNullResultsCached()
+    {
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->expects($this->once())
+            ->method('getItems')
+            ->willReturn(array())
+        ;
+
+        $decorator = new CachedDecorator($adapter);
+        $decorator->getItems(4, 5);
+
+        $this->assertEquals(array(), $decorator->getItems(4, 5));
+    }
+
+    public function testNoExtraCallsMadeIfPreviousItemWasAlreadyNotFound()
+    {
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->expects($this->once())
+            ->method('getItems')
+            ->willReturn(array())
+        ;
+
+        $decorator = new CachedDecorator($adapter);
+        $decorator->getItems(4, 5);
+        $decorator->getItems(9, 5);
+    }
+
+    /**
      * @dataProvider getTestsForCachingSystem
      */
     public function testCachingSystem($targetLimits, $expectedLimits)

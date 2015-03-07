@@ -34,6 +34,14 @@ final class CachedDecorator implements AdapterInterface
     private $cached = array();
 
     /**
+     * Position of the last item in the entire paged set. The decorator expects
+     * no rows after this position.
+     *
+     * @var integer|null
+     */
+    private $lastItemPos;
+
+    /**
      * @param AdapterInterface $adapter
      */
     public function __construct(AdapterInterface $adapter)
@@ -63,21 +71,35 @@ final class CachedDecorator implements AdapterInterface
         $begin = $offset;
         $end = $offset + $limit;
 
+        if (null !== $this->lastItemPos && $end > $this->lastItemPos) {
+            $end = $this->lastItemPos;
+        }
+
         // Start narrowing both beginning & end indices until an item at the
         // given position is not cached.
-        while ($begin < $end && isset($cached[$begin])) {
+        while ($begin < $end && array_key_exists($begin, $cached)) {
             $begin++;
         }
 
-        while ($begin < $end && isset($cached[$end - 1])) {
+        while ($begin < $end && array_key_exists($end - 1, $cached)) {
             $end--;
         }
 
         // If non-cached items were found, go get and cache them.
         if ($begin < $end) {
             $i = $begin;
-            foreach($this->adapter->getItems($begin, $end - $begin) as $item) {
+
+            $nonCachedOffset = $begin;
+            $nonCachedLimit = $end - $begin;
+
+            $nonCachedItems = $this->adapter->getItems($nonCachedOffset, $nonCachedLimit);
+
+            foreach($nonCachedItems as $item) {
                 $cached[$i++] = $item;
+            }
+
+            if (count($nonCachedItems) < $nonCachedLimit) {
+                $this->lastItemPos = $i - 1;
             }
         }
 
