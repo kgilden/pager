@@ -137,6 +137,18 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $page->getPageCount());
     }
 
+    public function testPageCountNeverLessThanOne()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy
+            ->method('getCount')
+            ->willReturn(0)
+        ;
+
+        $page = New Page($this->getMockAdapter(), $strategy, 1, 5);
+        $this->assertEquals(1, $page->getPageCount());
+    }
+
     public function testItemCountDelegatedToAdapter()
     {
         $adapter = $this->getMockAdapter();

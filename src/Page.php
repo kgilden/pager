@@ -119,7 +119,10 @@ final class Page implements PageInterface
      */
     public function getPageCount()
     {
-        return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->perPage);
+        // Should never allow a scenario with no pages even though this is
+        // technically correct. So if no elements were found, the page count
+        // will still be 1.
+        return $this->strategy->getCount($this->adapter, $this->getNumber(), $this->perPage) ?: 1;
     }
 
     /**

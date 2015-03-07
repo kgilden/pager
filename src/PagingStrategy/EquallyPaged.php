@@ -37,15 +37,6 @@ final class EquallyPaged implements PagingStrategyInterface
      */
     public function getCount(AdapterInterface $adapter, $page, $perPage)
     {
-        $count = (int) ceil($adapter->getItemCount() / $perPage);
-
-        if (0 === $count) {
-            // $count is 0, if no elements were found. In that case the number
-            // of pages is set to 1 to prevent any problems on the client side.
-            // @todo is this really necessary? Move to separate strategy?
-            $count = 1;
-        }
-
-        return $count;
+        return (int) ceil($adapter->getItemCount() / $perPage);
     }
 }

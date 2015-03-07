@@ -31,7 +31,7 @@ class EquallyPagedTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(2, 2, 1),
-            array(0, 2, 1),
+            array(0, 2, 0),
             array(3, 2, 2),
             array(4, 2, 2),
             array(5, 1, 5),
