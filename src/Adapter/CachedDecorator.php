@@ -106,9 +106,13 @@ final class CachedDecorator implements AdapterInterface
         $items = array();
 
         for ($i = $offset; $i < ($offset + $limit); $i++) {
-            if (!isset($cached[$i])) {
+            if (!array_key_exists($i, $cached)) {
                 break;
             }
+
+            // if (!isset($cached[$i])) {
+            //     break;
+            // }
 
             $items[] = $cached[$i];
         }

@@ -94,6 +94,20 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
         $decorator->getItems(9, 5);
     }
 
+    public function testSupportsNullItems()
+    {
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->method('getItems')
+            ->willReturn($expected = array(null, null))
+        ;
+
+        $decorator = new CachedDecorator($adapter);
+        $items = $decorator->getItems(1, 3);
+
+        $this->assertEquals($expected, $items);
+    }
+
     /**
      * @dataProvider getTestsForCachingSystem
      */
