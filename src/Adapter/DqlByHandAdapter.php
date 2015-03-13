@@ -13,7 +13,6 @@ namespace KG\Pager\Adapter;
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use KG\Pager\AdapterInterface;
 
@@ -59,7 +58,7 @@ final class DqlByHandAdapter implements AdapterInterface
     {
         try {
             return array_sum(array_map('current', $this->countQuery->getScalarResult()));
-        } catch (NoResultException $e)  {
+        } catch (NoResultException $e) {
             return 0;
         }
     }

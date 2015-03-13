@@ -145,7 +145,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->willReturn(0)
         ;
 
-        $page = New Page($this->getMockAdapter(), $strategy, 1, 5);
+        $page = new Page($this->getMockAdapter(), $strategy, 1, 5);
         $this->assertEquals(1, $page->getPageCount());
     }
 

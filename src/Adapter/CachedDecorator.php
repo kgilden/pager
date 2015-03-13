@@ -94,7 +94,7 @@ final class CachedDecorator implements AdapterInterface
 
             $nonCachedItems = $this->adapter->getItems($nonCachedOffset, $nonCachedLimit);
 
-            foreach($nonCachedItems as $item) {
+            foreach ($nonCachedItems as $item) {
                 $cached[$i++] = $item;
             }
 
