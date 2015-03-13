@@ -110,10 +110,6 @@ final class CachedDecorator implements AdapterInterface
                 break;
             }
 
-            // if (!isset($cached[$i])) {
-            //     break;
-            // }
-
             $items[] = $cached[$i];
         }
 
