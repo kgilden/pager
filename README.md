@@ -36,6 +36,19 @@ $page->getItems(); // ["eggplant"]
 ?>
 ```
 
+### Adapters
+
+Adapters are used to allow paging of specific types of items. The following
+are supported out of the box:
+
+* [`ArrayAdapter`](src/Adapter/ArrayAdapter.php)
+* [`DqlAdapter`](src/Adapter/DqlAdapter.php)
+* [`DqlByHandAdapter`](src/Adapter/DqlByHandAdapter.php)
+* [`ElasticaAdapter`](src/Adapter/ElasticaAdapter.php)
+
+A single [`Adapter`](src/Adapter.php) can be used to construct any of the
+adapters from within a single class.
+
 ### Strategies
 
 There are several different strategies to split the results into pages. The
