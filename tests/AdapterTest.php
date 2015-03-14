@@ -49,6 +49,15 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('KG\Pager\Adapter\DqlByHandAdapter', Adapter::dqlByHand($a, $b));
     }
 
+    public function testElastica()
+    {
+        if (!class_exists('Elastica\Search')) {
+            $this->markTestSkipped('ruflin/elastica must be installed to run this test');
+        }
+
+        $this->assertInstanceOf('KG\Pager\Adapter\ElasticaAdapter', Adapter::elastica($this->getMockSearch()));
+    }
+
     private function getMockQuery()
     {
         return $this
@@ -56,5 +65,21 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
         ;
+    }
+
+    public function getMockSearch()
+    {
+        $search = $this
+            ->getMockBuilder('Elastica\Search')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $search
+            ->method('getQuery')
+            ->willReturn($this->getMock('Elastica\Query'))
+        ;
+
+        return $search;
     }
 }
