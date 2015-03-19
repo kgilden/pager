@@ -93,9 +93,33 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
+    public function getNext()
+    {
+        if ($this->isLast()) {
+            return;
+        }
+
+        return new self($this->adapter, $this->strategy, $this->perPage, $this->number + 1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPrevious()
+    {
+        if ($this->isFirst()) {
+            return;
+        }
+
+        return new self($this->adapter, $this->strategy, $this->perPage, $this->number - 1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isFirst()
     {
-        return 0 === $this->getOffset();
+        return 1 === $this->getNumber();
     }
 
     /**

@@ -54,20 +54,57 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $page->getNumber());
     }
 
-    public function testIsFirstIfOffsetZero()
+    public function testGetNextReturnsNextPage()
     {
         $strategy = $this->getMockStrategy();
-        $strategy->method('getLimit')->willReturn(array(0, 5));
+        $strategy->method('getCount')->willReturn(3);
 
-        $page = new Page($this->getMockAdapter(), $strategy, 5, 1);
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->expects($this->once())
+            ->method('getItems')
+            ->willReturn(array_fill(0, 26, null))
+        ;
+
+        $page = new Page($adapter, $strategy, 25, 2);
+        $this->assertNotNull($nextPage = $page->getNext());
+
+        $this->assertNotSame($page, $nextPage);
+        $this->assertEquals(3, $nextPage->getNumber());
+    }
+
+    public function testGetNextNullIfLastPage()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getCount')->willReturn(3);
+
+        $page = new Page($this->getMockAdapter(), $strategy, 25, 3);
+        $this->assertNull($page->getNext());
+    }
+
+    public function testGetPreviousReturnsPreviousPage()
+    {
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 25, 2);
+        $this->assertNotNull($previousPage = $page->getPrevious());
+
+        $this->assertNotSame($page, $previousPage);
+        $this->assertEquals(1, $previousPage->getNumber());
+    }
+
+    public function testGetPreviousPageReturnsNullIfFirstPage()
+    {
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 25, 1);
+        $this->assertNull($page->getPrevious());
+    }
+
+    public function testIsFirstIfPageNumberFirst()
+    {
+        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 5, 1);
         $this->assertTrue($page->isFirst());
     }
 
-    public function testIsNotFirstIfOffsetNotZero()
+    public function testIsNotFirstIfPageNumberNotFirst()
     {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getLimit')->willReturn(array(10, 5));
-
         $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 5, 3);
         $this->assertFalse($page->isFirst());
     }

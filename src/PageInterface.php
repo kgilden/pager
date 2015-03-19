@@ -27,6 +27,16 @@ interface PageInterface
     public function getNumber();
 
     /**
+     * @return PageInterface|null Next page or null, if this is the last page
+     */
+    public function getNext();
+
+    /**
+     * @return PageInterface|null Previous page or null, if this is the first page
+     */
+    public function getPrevious();
+
+    /**
      * @return boolean Whether it's the first page
      */
     public function isFirst();
