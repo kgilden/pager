@@ -14,6 +14,8 @@ namespace KG\Pager;
 /**
  * Pager acts as a factory to create PageInterface objects (i.e. to split
  * results into multiple pages).
+ *
+ * @api
  */
 interface PagerInterface
 {
@@ -31,6 +33,8 @@ interface PagerInterface
      * @param integer|null     $page
      *
      * @return PageInterface
+     *
+     * @api
      */
     public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null);
 }

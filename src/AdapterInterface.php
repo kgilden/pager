@@ -18,11 +18,15 @@ namespace KG\Pager;
  *
  * A separate adapter should be created for example for SQL quereries,
  * ElasticSearch results etc.
+ *
+ * @api
  */
 interface AdapterInterface
 {
     /**
      * @return integer Total number of items found across all pages
+     *
+     * @api
      */
     public function getItemCount();
 
@@ -31,6 +35,8 @@ interface AdapterInterface
      * @param integer $limit  Maximum number of items to return
      *
      * @return array Items for the given offset and limit
+     *
+     * @api
      */
     public function getItems($offset, $limit);
 }

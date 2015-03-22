@@ -20,6 +20,8 @@ use KG\Pager\AdapterInterface;
  * An adapter to page Doctrine ORM's queries. Difference from regular DqlAdapter
  * is that the count query must be hand-made. This way the count query can be
  * optimized to focus solely on getting the item count.
+ *
+ * @api
  */
 final class DqlByHandAdapter implements AdapterInterface
 {
@@ -36,6 +38,8 @@ final class DqlByHandAdapter implements AdapterInterface
     /**
      * @param Query|QueryBuilder $query
      * @param Query|QueryBuilder $countQuery
+     *
+     * @api
      */
     public function __construct($query, $countQuery)
     {
@@ -53,6 +57,8 @@ final class DqlByHandAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItemCount()
     {
@@ -65,6 +71,8 @@ final class DqlByHandAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItems($offset, $limit)
     {

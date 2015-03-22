@@ -26,6 +26,8 @@ use KG\Pager\AdapterInterface;
  * Be careful with using this adapter though: performance is abysmal for
  * sufficiently complex queries. You might want to use DqlByHandAdapter in
  * such cases.
+ *
+ * @api
  */
 final class DqlAdapter implements AdapterInterface
 {
@@ -41,6 +43,8 @@ final class DqlAdapter implements AdapterInterface
 
     /**
      * @param Paginator $paginator
+     *
+     * @api
      */
     public function __construct(Paginator $paginator)
     {
@@ -54,6 +58,8 @@ final class DqlAdapter implements AdapterInterface
      * @param boolean                                      $fetchJoinCollection Whether the query joins a collection (true by default).
      *
      * @return SimpleDqlAdapter
+     *
+     * @api
      */
     public static function fromQuery($query, $fetchJoinCollection = true)
     {
@@ -62,6 +68,8 @@ final class DqlAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItemCount()
     {
@@ -70,6 +78,8 @@ final class DqlAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItems($offset, $limit)
     {

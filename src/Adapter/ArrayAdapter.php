@@ -16,6 +16,8 @@ use KG\Pager\AdapterInterface;
 /**
  * Adapter for arrays and objects which implement the \ArrayAccess & \Countable
  * interfaces.
+ *
+ * @api
  */
 final class ArrayAdapter implements AdapterInterface
 {
@@ -26,6 +28,8 @@ final class ArrayAdapter implements AdapterInterface
 
     /**
      * @param array $items
+     *
+     * @api
      */
     public function __construct(array $items)
     {
@@ -34,6 +38,8 @@ final class ArrayAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItemCount()
     {
@@ -42,6 +48,8 @@ final class ArrayAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItems($offset, $limit)
     {

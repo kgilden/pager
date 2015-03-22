@@ -25,6 +25,8 @@ use KG\Pager\AdapterInterface;
  *     ;
  *
  *     $page = $pager->paginate(new ElasticaAdapter($search));
+ *
+ * @api
  */
 class ElasticaAdapter implements AdapterInterface
 {
@@ -35,6 +37,8 @@ class ElasticaAdapter implements AdapterInterface
 
     /**
      * @param Search $search
+     *
+     * @api
      */
     public function __construct(Search $search)
     {
@@ -44,6 +48,8 @@ class ElasticaAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItemCount()
     {
@@ -52,6 +58,8 @@ class ElasticaAdapter implements AdapterInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @api
      */
     public function getItems($offset, $limit)
     {

@@ -19,6 +19,8 @@ use KG\Pager\Adapter\ElasticaAdapter;
 
 /**
  * A single class to create any adapter from this paging library.
+ *
+ * @api
  */
 final class Adapter
 {
@@ -33,6 +35,8 @@ final class Adapter
      * @param array $array
      *
      * @return ArrayAdapter
+     *
+     * @api
      */
     public static function _array(array $array)
     {
@@ -44,6 +48,8 @@ final class Adapter
      * @param boolean                                        $fetchJoinCollection
      *
      * @return DqlAdapter
+     *
+     * @api
      */
     public static function dql($query, $fetchJoinCollection = true)
     {
@@ -55,6 +61,8 @@ final class Adapter
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $countQuery
      *
      * @return DqlByHandAdapter
+     *
+     * @api
      */
     public static function dqlByHand($query, $countQuery)
     {
@@ -65,6 +73,8 @@ final class Adapter
      * @param Search $search
      *
      * @return ElasticaAdapter
+     *
+     * @api
      */
     public static function elastica(Search $search)
     {
