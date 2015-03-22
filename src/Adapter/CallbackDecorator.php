@@ -62,8 +62,16 @@ final class CallbackDecorator implements AdapterInterface
     {
         $items = $this->adapter->getItems($offset, $limit);
 
+        $oldCount = count($items);
+
         foreach ($this->callbacks as $callback) {
             $items = call_user_func($callback, $items);
+        }
+
+        $newCount = count($items);
+
+        if ($oldCount !== $newCount) {
+            throw new \LogicException(sprintf('Callbacks may not change the number of items (old count: %d, new count: %d).', $oldCount, $newCount));
         }
 
         return $items;

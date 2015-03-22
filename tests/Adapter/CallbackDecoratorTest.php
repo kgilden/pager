@@ -66,6 +66,25 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(8, 12), $decorator->getItems(0, 2));
     }
 
+    /**
+     * @expectedException \LogicException
+     */
+    public function testGetItemsFailsIfItemCountDifferentAfterCallback()
+    {
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->method('getItems')
+            ->willReturn(array(1, 2))
+        ;
+
+        $fn = function (array $items) {
+            return array(1);
+        };
+
+        $decorator = new CallbackDecorator($adapter, $fn);
+        $decorator->getItems(0, 2);
+    }
+
     private function getMockAdapter()
     {
         return $this->getMock('KG\Pager\AdapterInterface');
