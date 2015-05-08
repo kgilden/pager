@@ -16,6 +16,7 @@ use KG\Pager\Adapter\ArrayAdapter;
 use KG\Pager\Adapter\DqlAdapter;
 use KG\Pager\Adapter\DqlByHandAdapter;
 use KG\Pager\Adapter\ElasticaAdapter;
+use KG\Pager\Adapter\MongoAdapter;
 
 /**
  * A single class to create any adapter from this paging library.
@@ -79,5 +80,17 @@ final class Adapter
     public static function elastica(Search $search)
     {
         return new ElasticaAdapter($search);
+    }
+
+    /**
+     * @param \MongoCursor $cursor
+     *
+     * @return MongoAdapter
+     *
+     * @api
+     */
+    public static function mongo(\MongoCursor $cursor)
+    {
+        return new MongoAdapter($cursor);
     }
 }

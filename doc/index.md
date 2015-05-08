@@ -10,6 +10,7 @@ are supported out of the box:
 * [`DqlAdapter`](/src/Adapter/DqlAdapter.php)
 * [`DqlByHandAdapter`](/src/Adapter/DqlByHandAdapter.php)
 * [`ElasticaAdapter`](/src/Adapter/ElasticaAdapter.php)
+* [`MongoAdapter`](/src/Adapter/MongoAdapter.php)
 
 A single [`Adapter`](/src/Adapter.php) can be used to construct any of the
 adapters from within a single class.

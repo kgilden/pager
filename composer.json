@@ -27,7 +27,8 @@
     "suggest": {
         "doctrine/orm": "~2.3, if you're using DqlAdapter",
         "symfony/http-foundation": "~2.4 for automatic current page detection",
-        "ruflin/elastica": ">=0.90.1.0 to use ElasticaAdapter"
+        "ruflin/elastica": ">=0.90.1.0 to use ElasticaAdapter",
+        "ext-mongo": "to use MongoAdapter"
     },
     "extra": {
         "branch-alias": {
