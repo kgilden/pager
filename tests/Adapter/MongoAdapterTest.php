@@ -74,7 +74,7 @@ class MongoAdapterTest extends \PHPUnit_Framework_TestCase
             $mock
                 ->method($methodToMock)
                 ->will($this->returnCallback(function () use ($iterator, $methodToMock) {
-                    return call_user_method_array($methodToMock, $iterator, func_get_args());
+                    return call_user_func_array(array($iterator, $methodToMock), func_get_args());
                 }))
             ;
         }
