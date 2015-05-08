@@ -8,6 +8,9 @@ php:
 install:
   - travis_retry composer install --prefer-dist
 
+before_script:
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 script:
   - phpunit --coverage-clover=coverage.clover
 
