@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 1.0.0 (2015-05-09)
+
+* Minor refactorings
+* New `MongoAdapter` to page mongoDB cursors
+
 ### 1.0.0-beta1 (2015-03-22)
 
 * New generic Adapter to create any adapter
