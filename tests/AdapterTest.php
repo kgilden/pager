@@ -58,6 +58,24 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('KG\Pager\Adapter\ElasticaAdapter', Adapter::elastica($this->getMockSearch()));
     }
 
+    public function testMongo()
+    {
+        if (!class_exists('\MongoCursor')) {
+            $this->markTestSkipped('ext/mongodb must be installed to run this test');
+        }
+
+        $this->assertInstanceOf('KG\Pager\Adapter\MongoAdapter', Adapter::mongo($this->getMockCursor()));
+    }
+
+    private function getMockCursor()
+    {
+        return $this
+            ->getMockBuilder('\MongoCursor')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+    }
+
     private function getMockQuery()
     {
         return $this
