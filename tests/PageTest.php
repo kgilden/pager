@@ -109,6 +109,23 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($page->isFirst());
     }
 
+    public function testLimitAskedOnlyOnce()
+    {
+        $strategy = $this->getMockStrategy();
+        $strategy
+            ->expects($this->once())
+            ->method('getLimit')
+            ->willReturn(array(0, 5))
+        ;
+
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(array());
+
+        $page = new Page($adapter, $strategy, 5, 1);
+        $page->getItems();
+        $page->getItems();
+    }
+
     public function testIsLastPageIfNoRemainingItemsAfterThisPage()
     {
         $strategy = $this->getMockStrategy();

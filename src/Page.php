@@ -172,7 +172,7 @@ final class Page implements PageInterface
      */
     private function getOffset()
     {
-        if (!$this->offset) {
+        if (null === $this->offset) {
             list($this->offset, $this->length) = $this->getLimit();
         }
 
@@ -184,7 +184,7 @@ final class Page implements PageInterface
      */
     private function getLength()
     {
-        if (!$this->length) {
+        if (null === $this->length) {
             list($this->offset, $this->length) = $this->getLimit();
         }
 
@@ -210,7 +210,7 @@ final class Page implements PageInterface
      */
     private function getItemsWithOneExtra()
     {
-        if (!$this->itemsWithOneExtra) {
+        if (null === $this->itemsWithOneExtra) {
             $this->itemsWithOneExtra = $this
                 ->adapter
                 ->getItems($this->getOffset(), $this->getLength() + 1)
