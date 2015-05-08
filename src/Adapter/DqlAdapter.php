@@ -73,7 +73,11 @@ final class DqlAdapter implements AdapterInterface
      */
     public function getItemCount()
     {
-        return $this->itemCount ?: $this->itemCount = $this->paginator->count();
+        if (null === $this->itemCount) {
+            $this->itemCount = (int) $this->paginator->count();
+        }
+
+        return $this->itemCount;
     }
 
     /**
