@@ -54,8 +54,8 @@ final class DqlAdapter implements AdapterInterface
     /**
      * @see Paginator
      *
-     * @param Doctrine\ORM\Query|Doctrine\ORM\QueryBuilder $query               A Doctrine ORM query or query builder.
-     * @param boolean                                      $fetchJoinCollection Whether the query joins a collection (true by default).
+     * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query               A Doctrine ORM query or query builder.
+     * @param boolean                                        $fetchJoinCollection Whether the query joins a collection (true by default).
      *
      * @return SimpleDqlAdapter
      *
