@@ -66,8 +66,23 @@ final class CachedDecorator implements AdapterInterface
      */
     public function getItems($offset, $limit)
     {
-        $cached = &$this->cached;
+        list($notCachedOffset, $notCachedLimit) = $this->findNotCachedRange($offset, $limit);
 
+        if ($notCachedLimit > 0) {
+            $this->cache($notCachedOffset, $notCachedLimit);
+        }
+
+        return $this->fromCache($offset, $limit);
+    }
+
+    /**
+     * @param integer $offset
+     * @param integer $limit
+     *
+     * @return array
+     */
+    private function findNotCachedRange($offset, $limit)
+    {
         $begin = $offset;
         $end = $offset + $limit;
 
@@ -77,40 +92,56 @@ final class CachedDecorator implements AdapterInterface
 
         // Start narrowing both beginning & end indices until an item at the
         // given position is not cached.
-        while ($begin < $end && array_key_exists($begin, $cached)) {
+        while ($begin < $end && array_key_exists($begin, $this->cached)) {
             $begin++;
         }
 
-        while ($begin < $end && array_key_exists($end - 1, $cached)) {
+        while ($begin < $end && array_key_exists($end - 1, $this->cached)) {
             $end--;
         }
 
-        // If non-cached items were found, go get and cache them.
-        if ($begin < $end) {
-            $i = $begin;
+        return array($begin, $end - $begin);
+    }
 
-            $nonCachedOffset = $begin;
-            $nonCachedLimit = $end - $begin;
+    /**
+     * Fetches the given range of items from the adapter and stores them in
+     * the cache array.
+     *
+     * @param integer $offset
+     * @param integer $limit
+     */
+    private function cache($offset, $limit)
+    {
+        $items = $this->adapter->getItems($offset, $limit);
+        $i = $offset;
 
-            $nonCachedItems = $this->adapter->getItems($nonCachedOffset, $nonCachedLimit);
-
-            foreach ($nonCachedItems as $item) {
-                $cached[$i++] = $item;
-            }
-
-            if (count($nonCachedItems) < $nonCachedLimit) {
-                $this->lastItemPos = $i - 1;
-            }
+        foreach ($items as $item) {
+            $this->cached[$i++] = $item;
         }
 
+        if (count($items) < $limit) {
+            $this->lastItemPos = $i - 1;
+        }
+    }
+
+    /**
+     * Returns the range from previously cached items.
+     *
+     * @param integer $offset
+     * @param integer $limit
+     *
+     * @return array
+     */
+    private function fromCache($offset, $limit)
+    {
         $items = array();
 
         for ($i = $offset; $i < ($offset + $limit); $i++) {
-            if (!array_key_exists($i, $cached)) {
+            if (!array_key_exists($i, $this->cached)) {
                 break;
             }
 
-            $items[] = $cached[$i];
+            $items[] = $this->cached[$i];
         }
 
         return $items;
