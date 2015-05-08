@@ -99,7 +99,7 @@ final class Page implements PageInterface
             return;
         }
 
-        return new self($this->adapter, $this->strategy, $this->perPage, $this->number + 1);
+        return $this->getPage($this->number + 1);
     }
 
     /**
@@ -111,7 +111,7 @@ final class Page implements PageInterface
             return;
         }
 
-        return new self($this->adapter, $this->strategy, $this->perPage, $this->number - 1);
+        return $this->getPage($this->number - 1);
     }
 
     /**
@@ -218,5 +218,17 @@ final class Page implements PageInterface
         }
 
         return $this->itemsWithOneExtra;
+    }
+
+    /**
+     * Creates a new page with the given number.
+     *
+     * @param integer $number
+     *
+     * @return Page
+     */
+    private function getPage($number)
+    {
+        return new self($this->adapter, $this->strategy, $this->perPage, $number);
     }
 }
