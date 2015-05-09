@@ -3,6 +3,7 @@ Pager
 
 [![Build Status](https://img.shields.io/travis/kgilden/pager/master.svg?style=flat-square)](https://travis-ci.org/kgilden/pager)
 [![Quality](https://img.shields.io/scrutinizer/g/kgilden/pager.svg?style=flat-square)](https://scrutinizer-ci.com/g/kgilden/pager/)
+[![Packagist](https://img.shields.io/packagist/v/kgilden/pager.svg?style=flat-square)](https://packagist.org/packages/kgilden/pager)
 
 Pager is a library to split results to multiple pages - any way you want them!
 
