@@ -243,6 +243,48 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(4, 8), $page->getItems());
     }
 
+    /**
+     * @dataProvider getMethodsNotRelyingOnItemCount
+     */
+    public function testItemsNotCountedForMethod($method, $arguments = array())
+    {
+        $strategy = $this->getMockStrategy();
+
+        $strategy
+            ->expects($this->never())
+            ->method('getCount')
+        ;
+
+        $adapter = $this->getMockAdapter();
+
+        $adapter
+            ->expects($this->never())
+            ->method('getItemCount');
+        ;
+
+        $adapter
+            ->method('getItems')
+            ->willReturn(array(2, 4))
+        ;
+
+        $page = new Page($adapter, $strategy, 4, 5);
+
+        call_user_func_array(array($page, $method), $arguments);
+    }
+
+    public function getMethodsNotRelyingOnItemCount()
+    {
+        return array(
+            array('getNext'),
+            array('getPrevious'),
+            array('isFirst'),
+            array('isLast'),
+            array('getItems'),
+            array('getNumber'),
+            array('callback', array(function ($items) { return $items; })),
+        );
+    }
+
     private function getMockAdapter()
     {
         return $this->getMock('KG\Pager\AdapterInterface');

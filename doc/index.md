@@ -95,6 +95,8 @@ following methods:
     - Page::getNumber()
     - Page::callback()
 
+This guarantee only applies when using built-in strategies and adapters.
+
 ### Automatically setting the current page
 
 The [symfony/http-foundation](https://packagist.org/packages/symfony/http-foundation)
