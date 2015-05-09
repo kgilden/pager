@@ -146,3 +146,7 @@ try {
 
 ?>
 ```
+
+### Class diagram
+
+![class diagram](class_diagram.png)

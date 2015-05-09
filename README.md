@@ -7,6 +7,14 @@ Pager
 
 Pager is a library to split results to multiple pages - any way you want them!
 
+Features
+--------
+
+ * 5 built-in adapters for arrays, Doctrine ORM, ElasticSearch & MongoDB;
+ * safe subset of methods to not even count items;
+ * strategies to split pages inequally (i.e. 2 last pages merged);
+ * integrates nicely with Symofony's `HttpKernel` to infer the current page;
+
 Usage
 -----
 
@@ -14,7 +22,7 @@ Two objects work together to split a set of items to pages: pager and adapter.
 Pagers act as factories for pages. Adapters allow concrete item sets to be
 paged (for example there's an adapter for Doctrine queries).
 
-Here's an example with arrays:
+Here's an example with arrays (check out [the docs](doc/index.md) for more):
 
 ```php
 <?php
@@ -38,8 +46,6 @@ $page->getItems(); // ["eggplant"]
 
 ?>
 ```
-
-Check out [the docs](doc/index.md) for more.
 
 Installation
 ------------
