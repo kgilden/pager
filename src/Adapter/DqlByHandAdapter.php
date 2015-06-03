@@ -28,7 +28,7 @@ final class DqlByHandAdapter implements AdapterInterface
     /**
      * @var Query
      */
-    private $query;
+    private $limitQuery;
 
     /**
      * @var Query
@@ -36,22 +36,22 @@ final class DqlByHandAdapter implements AdapterInterface
     private $countQuery;
 
     /**
-     * @param Query|QueryBuilder $query
+     * @param Query|QueryBuilder $limitQuery
      * @param Query|QueryBuilder $countQuery
      *
      * @api
      */
-    public function __construct($query, $countQuery)
+    public function __construct($limitQuery, $countQuery)
     {
-        if ($query instanceof QueryBuilder) {
-            $query = $query->getQuery();
+        if ($limitQuery instanceof QueryBuilder) {
+            $limitQuery = $limitQuery->getQuery();
         }
 
         if ($countQuery instanceof QueryBuilder) {
             $countQuery = $countQuery->getQuery();
         }
 
-        $this->query = $query;
+        $this->limitQuery = $limitQuery;
         $this->countQuery = $countQuery;
     }
 
@@ -77,10 +77,10 @@ final class DqlByHandAdapter implements AdapterInterface
     public function getItems($offset, $limit)
     {
         return $this
-            ->query
+            ->limitQuery
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->getResult($this->query->getHydrationMode())
+            ->getResult($this->limitQuery->getHydrationMode())
         ;
     }
 }
