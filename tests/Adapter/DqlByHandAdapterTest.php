@@ -65,34 +65,30 @@ class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(15, $adapter->getItemCount());
     }
 
-    public function testGetItemsDelegatesToMainQuery()
+    public function testGetItemsDelegatesToAdapter()
     {
-        $query = $this->getMockQuery();
-        $query->method('getHydrationMode')->willReturN(Query::HYDRATE_ARRAY);
+        $adapter = new DqlByHandAdapter($this->getMockQuery(), $this->getMockQuery());
 
-        $query
-            ->expects($this->once())
-            ->method('setFirstResult')
-            ->with(5)
-            ->will($this->returnSelf())
-        ;
+        $class = new \ReflectionClass($adapter);
+        $property = $class->getProperty('adapter');
+        $property->setAccessible(true);
 
-        $query
-            ->expects($this->once())
-            ->method('setMaxResults')
-            ->with(10)
-            ->will($this->returnSelf())
-        ;
+        $this->assertInstanceOf('KG\Pager\Adapter\DqlAdapter', $property->getValue($adapter));
+        $property->setValue($adapter, $parent = $this->getMockAdapter());
 
-        $query
+        $parent
             ->expects($this->once())
-            ->method('getResult')
-            ->with($this->equalTo(Query::HYDRATE_ARRAY))
+            ->method('getItems')
+            ->with(5, 10)
             ->willReturn($expected = array_fill(0, 10, array('id' => 5, 'foo' => 'bar')))
         ;
 
-        $adapter = new DqlByHandAdapter($query, $this->getMockQuery());
         $this->assertSame($expected, $adapter->getItems(5, 10));
+    }
+
+    private function getMockAdapter()
+    {
+        return $this->getMock('KG\Pager\AdapterInterface');
     }
 
     private function getMockQuery()

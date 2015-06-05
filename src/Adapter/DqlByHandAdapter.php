@@ -19,7 +19,12 @@ use KG\Pager\AdapterInterface;
 /**
  * An adapter to page Doctrine ORM's queries. Difference from regular DqlAdapter
  * is that the count query must be hand-made. This way the count query can be
- * optimized to focus solely on getting the item count.
+ * optimized to focus solely on getting the item count. Example:
+ *
+ *     $countQuery = $em->createQuery('SELECT COUNT(e.id) FROM Entity e');
+ *     $limitQuery = $em->createQuery('SELECT e, f FROM Entity e JOIN e.foo f');
+ *
+ *     $page = $pager->paginate(new DqlByHandAdapter($limitQuery, $countQuery));
  *
  * @api
  */
@@ -28,31 +33,28 @@ final class DqlByHandAdapter implements AdapterInterface
     /**
      * @var Query
      */
-    private $limitQuery;
+    private $countQuery;
 
     /**
-     * @var Query
+     * @var DqlAdapter
      */
-    private $countQuery;
+    private $adapter;
 
     /**
      * @param Query|QueryBuilder $limitQuery
      * @param Query|QueryBuilder $countQuery
+     * @param bool               $fetchJoinCollection Whether the query joins a collection (true by default)
      *
      * @api
      */
-    public function __construct($limitQuery, $countQuery)
+    public function __construct($limitQuery, $countQuery, $fetchJoinCollection = true)
     {
-        if ($limitQuery instanceof QueryBuilder) {
-            $limitQuery = $limitQuery->getQuery();
-        }
-
         if ($countQuery instanceof QueryBuilder) {
             $countQuery = $countQuery->getQuery();
         }
 
-        $this->limitQuery = $limitQuery;
         $this->countQuery = $countQuery;
+        $this->adapter = DqlAdapter::fromQuery($limitQuery, $fetchJoinCollection);
     }
 
     /**
@@ -76,11 +78,6 @@ final class DqlByHandAdapter implements AdapterInterface
      */
     public function getItems($offset, $limit)
     {
-        return $this
-            ->limitQuery
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->getResult($this->limitQuery->getHydrationMode())
-        ;
+        return $this->adapter->getItems($offset, $limit);
     }
 }
