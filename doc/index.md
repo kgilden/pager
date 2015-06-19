@@ -21,6 +21,7 @@ adapters from within a single class.
 $pager->paginate(Adapter::_array(['foo', 'bar', 'baz']));
 
 ?>
+```
 
 ### Strategies
 
