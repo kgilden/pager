@@ -1,6 +1,7 @@
 {
     "name": "kgilden/pager",
     "description": "A library to split results into multiple pages",
+    "keywords": ["pager", "paginator", "pagination", "library"],
     "license": "MIT",
     "authors": [
         {
