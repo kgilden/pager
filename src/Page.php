@@ -85,6 +85,17 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
+    public function getItemsOfAllPages()
+    {
+        // @todo this is suboptimal - ideally we don't need to know item count
+        // to get all items. Instead the entire collection should be returned.
+        // Doing it this way to minimize BC breaks.
+        return $this->adapter->getItems(0, $this->getItemCount());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getNumber()
     {
         return $this->number;

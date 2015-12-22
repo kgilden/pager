@@ -31,6 +31,31 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $page->getItems());
     }
 
+    public function testItemsOfAllPagesReturnsItemsFromAllPages()
+    {
+        $expected = range(0, 8);
+
+        $strategy = $this->getMockStrategy();
+
+        $adapter = $this->getMockAdapter();
+        $adapter
+            ->method('getCount')
+            ->will($this->returnCallback(function () use ($expected) {
+                return count($expected);
+            }))
+        ;
+
+        $adapter
+            ->method('getItems')
+            ->will($this->returnCallback(function ($offset, $limit) use ($expected) {
+                return array_slice($expected, $offset, $limit);
+            }))
+        ;
+
+        $page = new Page($adapter, $strategy, 2, 2);
+        $this->assertEquals($expected, $page->getItemsOfAllPages());
+    }
+
     public function testExtraItemFetched()
     {
         $strategy = $this->getMockStrategy();

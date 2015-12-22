@@ -82,6 +82,27 @@ $page->getItems(); // [2, 4]
 ?>
 ```
 
+### Getting items from all of the pages
+
+Sometimes it might be necessary to keep using the paging system yet fetch all
+items from all of the pages.
+
+```php
+<?php
+
+use KG\Pager\Pager;
+use KG\Pager\Adapter\ArrayAdapter;
+
+$perPage = 2;
+$pager = new Pager();
+$page = $pager->paginate(new ArrayAdapter(range(0, 3)), $perPage);
+
+$page->getItems(); // [0, 1]
+$page->getItemsOfAllPages(); // [0, 1, 2, 3]
+
+?>
+```
+
 ### Avoiding expensive counting
 
 On bigger result sets it might be prohibitively expensive to count the total

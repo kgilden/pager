@@ -26,6 +26,13 @@ interface PageInterface
     public function getItems();
 
     /**
+     * @return array Items from all of the pages
+     *
+     * @api
+     */
+    public function getItemsOfAllPages();
+
+    /**
      * @return integer 1-indexed number of this page within the page collection
      *
      * @api
