@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 1.1.0 (2015-12-22)
+
+* Added `Page::getItemsOfAllPages()` to fetch all items from all pages
+
 ### 1.0.0 (2015-05-09)
 
 * Minor refactorings
