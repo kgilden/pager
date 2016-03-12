@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 1.1.1 (2016-03-12)
+
+* Added build matrix to test for highest and lowest dependencies
+* Support for Symfony v3.x
+
 ### 1.1.0 (2015-12-22)
 
 * Added `Page::getItemsOfAllPages()` to fetch all items from all pages
