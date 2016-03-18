@@ -181,21 +181,21 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($page->isOutOfBounds());
     }
 
-    public function testIsOutOfBoundsifAbovePageCount()
+    public function testIsOutOfBoundsIfNoItemsFound()
     {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getCount')->willReturn(3);
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(array());
 
-        $page = new Page($this->getMockAdapter(), $strategy, 5, 4);
+        $page = new Page($adapter, $this->getMockStrategy(), 5, 4);
         $this->assertTrue($page->isOutOfBounds());
     }
 
-    public function testIsNotOutOfBoundsIfPositiveAndBelowPageCount()
+    public function testIsNotOutOfBoundsIfPositiveAndItemsFound()
     {
-        $strategy = $this->getMockStrategy();
-        $strategy->method('getCount')->willReturn(3);
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(array('a', 'b', 'c'));
 
-        $page = new Page($this->getMockAdapter(), $strategy, 5, 3);
+        $page = new Page($adapter, $this->getMockStrategy(), 5, 3);
         $this->assertFalse($page->isOutOfBounds());
     }
 
@@ -304,6 +304,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             array('getPrevious'),
             array('isFirst'),
             array('isLast'),
+            array('isOutOfBounds'),
             array('getItems'),
             array('getNumber'),
             array('callback', array(function ($items) { return $items; })),

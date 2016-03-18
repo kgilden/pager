@@ -146,7 +146,7 @@ final class Page implements PageInterface
      */
     public function isOutOfBounds()
     {
-        return $this->getNumber() < 1 || $this->getNumber() > $this->getPageCount();
+        return ($this->getNumber() < 1) || (0 === count($this->getItemsWithOneExtra()));
     }
 
     /**
