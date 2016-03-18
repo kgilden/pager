@@ -146,7 +146,17 @@ final class Page implements PageInterface
      */
     public function isOutOfBounds()
     {
-        return ($this->getNumber() < 1) || (0 === count($this->getItemsWithOneExtra()));
+        $number = $this->getNumber();
+
+        if ($this->getNumber() < 1) {
+            return true;
+        }
+
+        if (($number > 1) && !count($this->getItemsWithOneExtra())) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

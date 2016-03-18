@@ -199,6 +199,15 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($page->isOutOfBounds());
     }
 
+    public function testIsNotOutOfBoundsIfNoItemsFoundOnFirstPage()
+    {
+        $adapter = $this->getMockAdapter();
+        $adapter->method('getItems')->willReturn(array());
+
+        $page = new Page($adapter, $this->getMockStrategy(), 5, 1);
+        $this->assertFalse($page->isOutOfBounds(), 'Being on 1-st page without results implies there are no items - means we\'re not out of bounds.');
+    }
+
     public function testGetPageCountDelegatedToStrategy()
     {
         $adapter = $this->getMockAdapter();
