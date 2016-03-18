@@ -113,6 +113,7 @@ following methods:
     - Page::getPrevious()
     - Page::isFirst()
     - Page::isLast()
+    - Page::isOutOfBounds()
     - Page::getItems()
     - Page::getNumber()
     - Page::callback()
