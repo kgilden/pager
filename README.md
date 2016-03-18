@@ -13,7 +13,7 @@ Features
  * 5 built-in adapters for arrays, Doctrine ORM, ElasticSearch & MongoDB;
  * safe subset of methods to not even count items;
  * strategies to split pages inequally (i.e. 2 last pages merged);
- * integrates nicely with Symofony's `HttpKernel` to infer the current page;
+ * integrates nicely with Symfony's `HttpKernel` to infer the current page;
 
 Usage
 -----
