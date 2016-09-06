@@ -1,6 +1,15 @@
 Documentation
 -------------
 
+### Table of Contents
+
+* [Adapters](#adapters)
+* [Strategies](#strategies)
+* [Callbacks](#callbacks)
+* [Avoid expensive counting](#avoid-expensive-counting)
+* [Bounds checking](#bounds-checking)
+* [Class diagram](#class-diagram)
+
 ### Adapters
 
 Adapters are used to allow paging of specific types of items. The following
