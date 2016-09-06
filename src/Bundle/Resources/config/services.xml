@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+
+        <parameter key="kg_pager.class">KG\Pager\Pager</parameter>
+        <parameter key="kg_pager.request_decorator.class">KG\Pager\RequestDecorator</parameter>
+        <parameter key="kg_pager.bounds_check_decorator.class">KG\Pager\BoundsCheckDecorator</parameter>
+        <parameter key="kg_pager.strategy.last_page_merged.class">KG\Pager\PagingStrategy\LastPageMerged</parameter>
+        <parameter key="kg_pager.out_of_bounds_redirector.class">KG\Pager\Bundle\EventListener\OutOfBoundsRedirector</parameter>
+        <parameter key="kg_pager.pager_aware_repository_factory.class">KG\Pager\Bundle\Doctrine\PagerAwareRepositoryFactory</parameter>
+
+    </parameters>
+
+    <services>
+
+
+        <!-- This is kept enabled only if any of the pagers should redirect. -->
+        <service id="kg_pager.out_of_bounds_redirector" class="%kg_pager.out_of_bounds_redirector.class%">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+        </service>
+
+        <!-- This is kept enabled only if Dcotrine is installed -->
+        <service id="kg_pager.pager_aware_repository_factory" class="%kg_pager.pager_aware_repository_factory.class%">
+            <argument type="service" id="kg_pager" />
+        </service>
+
+    </services>
+</container>

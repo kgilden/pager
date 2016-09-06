@@ -18,6 +18,9 @@
     "require-dev": {
         "doctrine/orm": "^2.3",
         "symfony/http-foundation": "^2.4|^3.0",
+        "symfony/config": "^2.0|^3.0",
+        "symfony/dependency-injection": "^2.0|^3.0",
+        "symfony/http-kernel": "^2.0|^3.0",
         "ruflin/elastica": ">=0.90.1.0"
     },
     "autoload": {
