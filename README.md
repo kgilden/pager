@@ -14,6 +14,7 @@ Features
  * safe subset of methods to not even count items;
  * strategies to split pages inequally (i.e. 2 last pages merged);
  * integrates nicely with Symfony's `HttpKernel` to infer the current page;
+ * provides a bundle to seamlessly integrate with Symfony;
 
 Documentation
 -------------
