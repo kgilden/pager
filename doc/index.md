@@ -1,6 +1,19 @@
 Documentation
 -------------
 
+### Table of Contents
+
+* [Adapters](#adapters)
+* [Strategies](#strategies)
+* [Callbacks](#callbacks)
+* [Avoid expensive counting](#avoid-expensive-counting)
+* [Bounds checking](#bounds-checking)
+* [Symfony bundle](#symfony-bundle)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Configuration](#configuration)
+* [Class diagram](#class-diagram)
+
 ### Adapters
 
 Adapters are used to allow paging of specific types of items. The following
@@ -169,6 +182,142 @@ try {
 
 ?>
 ```
+
+### Symfony bundle
+
+The package comes with a bundle to seamlessly integrate with your Symfony
+projects.
+
+#### Installation
+
+After installing the package, simply enable it in the kernel:
+
+```php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new KG\Pager\Bundle\KGPagerBundle(),
+    );
+}
+?>
+```
+
+That's it! no extra configuration necessary. You can make sure the bundle's up
+and running by executing
+
+```bash
+app/console container:debug | grep kg_pager
+```
+
+If everything's working, it should print out the pager service.
+
+#### Usage
+
+By default a single pager is defined. Access it through the `kg_pager` service id.
+The current page is inferred from the `page` query parameter.
+
+```php
+<?php
+
+use KG\Pager\Adapter;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class AcmeDemoController extends Controller
+{
+    public function listPagedAction()
+    {
+        $qb = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Product')
+            ->createQueryBuilder('p')
+        ;
+
+        // 25 items per page is used by default.
+        $itemsPerPage = 10;
+        $page = $this->get('kg_pager')->paginate(Adapter::dql($qb), $itemsPerPage);
+
+        return $this->render('App:Product:listPaged.html.twig', array(
+            'page' => $page
+        ));
+    }
+}
+
+?>
+```
+
+Of course the pager can also be injected to any service.
+
+```php
+<?php
+
+use KG\Pager\Adapter;
+use KG\Pager\PagerInterface;
+
+class ExampleService
+{
+    private $pager;
+
+    public function __construct(PagerInterface $pager)
+    {
+        $this->pager = $pager;
+    }
+
+    public function doSomethingPaged()
+    {
+        $list = array('foo', 'bar', 'baz');
+
+        return $this->pager->paginate(Adapter::_array($list), 2);
+    }
+}
+
+?>
+```
+
+```xml
+<service id="example_service" class="Acme\ExampleService">
+    <argument type="service" id="kg_pager" />
+</service>
+```
+
+#### Configuration
+
+You may want to optinally configure the bundle to define several pagers, each
+with their own settings.
+
+```yaml
+kg_pager:
+    default: foo              # now `kg_pager` returns a pager named `foo`
+    pagers:
+        foo:
+            per_page: 20      # how many items to have on a single page
+            key: custom_page  # the key used to infer the current page i.e. `http://exapmle.com?custom_page=2`
+            merge: 10         # if less than 10 items are left on the last page, merge it with the previous page
+            redirect: false   # whether to redirect the user, if they requested an out of bounds page
+        bar: ~                # pager with default settings
+```
+
+The pagers are registered in the service container as `kg_pager.pager.%name%`
+with the default pager aliased to `kg_pager`.
+
+You may optionally want to have the default pager be automatically injected to
+your entity repositories. For this do the following:
+
+ * Have a custom repository class implement [`PagerAwareInterface`][Doctrine/PagerAwareInterface.php];
+ * Set the class as the default repository class and add a custom factory service
+   in doctrine configuration:
+
+   ```yml
+   // app/config/config.yml
+   doctrine:
+       orm:
+           default_repository_class: 'Repository\Implementing\PagerAwareInterface'
+           repository_factory: 'kg_pager.pager_aware_repository_factory'
+
+   ```
 
 ### Class diagram
 
