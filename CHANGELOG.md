@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 1.2.0 (2016-10-01)
+
+* Merged `kgilden/pager-bundle` to this package
+* Made `Page::isOutOfBounds` not cause counting rows
+
 ### 1.1.1 (2016-03-12)
 
 * Added build matrix to test for highest and lowest dependencies
