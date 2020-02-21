@@ -238,7 +238,7 @@ final class Page implements PageInterface
             ;
         }
 
-        return $this->itemsWithOneExtra;
+        return $this->itemsWithOneExtra ?: array();
     }
 
     /**
