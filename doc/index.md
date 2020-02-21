@@ -12,6 +12,7 @@ Documentation
   * [Installation](#installation)
   * [Usage](#usage)
   * [Configuration](#configuration)
+  * [Twig](#twig)
 * [Class diagram](#class-diagram)
 
 ### Adapters
@@ -318,6 +319,22 @@ your entity repositories. For this do the following:
            repository_factory: 'kg_pager.pager_aware_repository_factory'
 
    ```
+
+#### Twig
+
+The bundle adds a new Twig function `paged`. You can use this to paginate
+items in your Twig templates.
+
+```twig
+{% set items = [1, 2, 3, 4] %}
+{% set perPage = 2 %}
+{% set currentPage = 2 %}
+
+{% set pageA = paged(items) %}
+{% set pageB = paged(items, perPage, currentPage) %}
+
+{# Both `pageA` and `pageB` are instances of `PageInterface` #}
+```
 
 ### Class diagram
 

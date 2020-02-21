@@ -12,6 +12,7 @@
         <parameter key="kg_pager.strategy.last_page_merged.class">KG\Pager\PagingStrategy\LastPageMerged</parameter>
         <parameter key="kg_pager.out_of_bounds_redirector.class">KG\Pager\Bundle\EventListener\OutOfBoundsRedirector</parameter>
         <parameter key="kg_pager.pager_aware_repository_factory.class">KG\Pager\Bundle\Doctrine\PagerAwareRepositoryFactory</parameter>
+        <parameter key="kg_pager.twig_extension.class">KG\Pager\Twig\Extension</parameter>
 
     </parameters>
 
@@ -25,6 +26,12 @@
 
         <!-- This is kept enabled only if Dcotrine is installed -->
         <service id="kg_pager.pager_aware_repository_factory" class="%kg_pager.pager_aware_repository_factory.class%">
+            <argument type="service" id="kg_pager" />
+        </service>
+
+        <!-- This is enabled only if Twig is installed. -->
+        <service id="kg_pager.twig_extension" class="%kg_pager.twig_extension.class%" public="false">
+            <tag name="twig.extension" />
             <argument type="service" id="kg_pager" />
         </service>
 
