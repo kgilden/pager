@@ -77,7 +77,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItems()
+    public function getItems(): array
     {
         return array_slice($this->getItemsWithOneExtra(), 0, $this->getLength());
     }
@@ -85,7 +85,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemsOfAllPages()
+    public function getItemsOfAllPages(): array
     {
         // @todo this is suboptimal - ideally we don't need to know item count
         // to get all items. Instead the entire collection should be returned.
@@ -96,7 +96,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }
@@ -104,10 +104,10 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getNext()
+    public function getNext(): ?PageInterface
     {
         if ($this->isLast()) {
-            return;
+            return null;
         }
 
         return $this->getPage($this->number + 1);
@@ -116,10 +116,10 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPrevious()
+    public function getPrevious(): ?PageInterface
     {
         if ($this->isFirst()) {
-            return;
+            return null;
         }
 
         return $this->getPage($this->number - 1);
@@ -128,7 +128,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isFirst()
+    public function isFirst(): bool
     {
         return 1 === $this->getNumber();
     }
@@ -136,7 +136,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isLast()
+    public function isLast(): bool
     {
         return count($this->getItemsWithOneExtra()) <= $this->getLength();
     }
@@ -144,7 +144,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isOutOfBounds()
+    public function isOutOfBounds(): bool
     {
         $number = $this->getNumber();
 
@@ -162,7 +162,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPageCount()
+    public function getPageCount(): int
     {
         // Should never allow a scenario with no pages even though this is
         // technically correct. So if no elements were found, the page count
@@ -173,7 +173,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return $this->itemCount ?: $this->itemCount = $this->adapter->getItemCount();
     }
@@ -181,7 +181,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function callback($callback)
+    public function callback($callback): PageInterface
     {
         $adapter = new CallbackDecorator($this->adapter, $callback);
 
