@@ -26,7 +26,7 @@
         "symfony/http-kernel": "^2.4|^3.0",
         "ruflin/elastica": ">=0.90.1.0",
         "phpunit/phpunit": "^8.2.3",
-        "twig/twig": "^1.38|^2.7",
+        "twig/twig": "^1.43|^2.7",
         "symfony/yaml": "^5.1"
     },
     "autoload": {
@@ -36,7 +36,7 @@
         "doctrine/orm": "^2.4, if you're using DqlAdapter",
         "symfony/http-foundation": "~2.4 for automatic current page detection",
         "ruflin/elastica": ">=0.90.1.0 to use ElasticaAdapter",
-        "twig/twig": "^1.38|^2.7 to use the Twig Extension",
+        "twig/twig": "^1.43|^2.7 to use the Twig Extension",
         "ext-mongo": "to use MongoAdapter"
     },
     "extra": {
