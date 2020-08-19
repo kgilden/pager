@@ -57,6 +57,6 @@ class EquallyPagedTest extends \PHPUnit_Framework_TestCase
 
     private function getMockAdapter()
     {
-        return $this->getMock('KG\Pager\AdapterInterface');
+        return $this->createMock('KG\Pager\AdapterInterface');
     }
 }

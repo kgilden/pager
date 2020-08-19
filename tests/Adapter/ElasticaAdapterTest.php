@@ -76,7 +76,7 @@ class ElasticaAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function getMockQuery()
     {
-        return $this->getMock('Elastica\Query');
+        return $this->createMock('Elastica\Query');
     }
 
     public function getMockResultSet()

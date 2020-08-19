@@ -95,7 +95,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $search
             ->method('getQuery')
-            ->willReturn($this->getMock('Elastica\Query'))
+            ->willReturn($this->createMock('Elastica\Query'))
         ;
 
         return $search;

@@ -39,7 +39,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $adapter = $this->getMockAdapter();
         $adapter
-            ->method('getCount')
+            ->method('getItemCount')
             ->will($this->returnCallback(function () use ($expected) {
                 return count($expected);
             }))
@@ -322,11 +322,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     private function getMockAdapter()
     {
-        return $this->getMock('KG\Pager\AdapterInterface');
+        return $this->createMock('KG\Pager\AdapterInterface');
     }
 
     private function getMockStrategy()
     {
-        return $this->getMock('KG\Pager\PagingStrategyInterface');
+        return $this->createMock('KG\Pager\PagingStrategyInterface');
     }
 }

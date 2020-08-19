@@ -95,21 +95,21 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
 
     private function getMockAdapter()
     {
-        return $this->getMock('KG\Pager\AdapterInterface');
+        return $this->createMock('KG\Pager\AdapterInterface');
     }
 
     private function getMockPage()
     {
-        return $this->getMock('KG\Pager\PageInterface');
+        return $this->createMock('KG\Pager\PageInterface');
     }
 
     private function getMockPager()
     {
-        return $this->getMock('KG\Pager\PagerInterface');
+        return $this->createMock('KG\Pager\PagerInterface');
     }
 
     private function getMockRequestStack()
     {
-        return $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        return $this->createMock('Symfony\Component\HttpFoundation\RequestStack');
     }
 }
