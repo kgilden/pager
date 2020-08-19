@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 1.2.1 (2020-02-21)
+
+* Added Twig extension.
+* Dropped support for PHP v5.3 & HHVM.
+
 ### 1.2.0 (2016-10-01)
 
 * Merged `kgilden/pager-bundle` to this package

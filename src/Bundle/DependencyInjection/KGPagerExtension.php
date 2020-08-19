@@ -46,6 +46,10 @@ class KGPagerExtension extends Extension
             // Doctrine not installed, remove the pager aware repository factory.
             $container->removeDefinition('kg_pager.pager_aware_repository_factory');
         }
+
+        if (!class_exists('Twig_Environment')) {
+            $container->removeDefinition('kg_pager.twig_extension');
+        }
     }
 
     /**
