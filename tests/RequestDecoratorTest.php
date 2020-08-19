@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestDecoratorTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
             $this->markTestSkipped('symfony/http-foundation must be installed to run this test');

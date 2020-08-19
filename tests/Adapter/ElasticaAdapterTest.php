@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ElasticaAdapterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Elastica\Search')) {
             $this->markTestSkipped('ruflin/elastica must be installed to run this test');

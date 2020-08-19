@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class DqlByHandAdapterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Doctrine\ORM\Query')) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class MongoAdapterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('\MongoCursor')) {
             $this->markTestSkipped('ext/mongodb must be installed to run this test');

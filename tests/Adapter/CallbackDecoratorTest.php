@@ -67,11 +67,10 @@ class CallbackDecoratorTest extends TestCase
         $this->assertEquals(array(8, 12), $decorator->getItems(0, 2));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetItemsFailsIfItemCountDifferentAfterCallback()
     {
+        $this->expectException(\LogicException::class);
+
         $adapter = $this->getMockAdapter();
         $adapter
             ->method('getItems')
