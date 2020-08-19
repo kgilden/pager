@@ -22,7 +22,7 @@ class ExtensionTest extends TestCase
     {
         $twig = <<<TWIG
 {% set page = paged([1, 2, 3, 4, 5], 2, 2) %}
-{% for item in page.items %}{{ item }} {% endfor %}
+{% for item in page.items %}{{ item }},{% endfor %}
 TWIG;
 
         $env = new \Twig_Environment(new ArrayLoader([
@@ -30,6 +30,6 @@ TWIG;
         ]));
         $env->addExtension(new Extension(new Pager()));
 
-        $this->assertEquals('3 4 ', $env->render('index'));
+        $this->assertEquals('3,4,', $env->render('index'));
     }
 }
