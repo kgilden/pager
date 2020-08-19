@@ -12,10 +12,11 @@
 namespace KG\Pager\Tests\Bundle\DependencyInjection;
 
 use KG\Pager\Bundle\DependencyInjection\KGPagerExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
-class KGPagerExtensionTest extends \PHPUnit_Framework_TestCase
+class KGPagerExtensionTest extends TestCase
 {
     public function testDefaultPagerRegistered()
     {

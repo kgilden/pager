@@ -3,8 +3,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\MongoAdapter;
+use PHPUnit\Framework\TestCase;
 
-class MongoAdapterTest extends \PHPUnit_Framework_TestCase
+class MongoAdapterTest extends TestCase
 {
     protected function setUp()
     {

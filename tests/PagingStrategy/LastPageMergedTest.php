@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\PagingStrategy;
 
 use KG\Pager\PagingStrategy\LastPageMerged;
+use PHPUnit\Framework\TestCase;
 
-class LastPageMergedTest extends \PHPUnit_Framework_TestCase
+class LastPageMergedTest extends TestCase
 {
     /**
      * @dataProvider getTestDataForLimit
@@ -60,6 +61,8 @@ class LastPageMergedTest extends \PHPUnit_Framework_TestCase
 
         $strategy = new LastPageMerged(0.5);
         $strategy->getLimit($adapter, 1, 5);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

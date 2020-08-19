@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\DqlAdapter;
+use PHPUnit\Framework\TestCase;
 
-class DqlAdapterTest extends \PHPUnit_Framework_TestCase
+class DqlAdapterTest extends TestCase
 {
     protected function setUp()
     {
@@ -71,6 +72,8 @@ class DqlAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $query = $this->getMockQuery();
         $adapter = DqlAdapter::fromQuery($query);
+
+        $this->addToAssertionCount(1);
     }
 
     private function getMockPaginator()

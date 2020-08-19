@@ -4,9 +4,10 @@ namespace KG\Pager\Tests\Twig;
 
 use KG\Pager\Pager;
 use KG\Pager\Twig\Extension;
+use PHPUnit\Framework\TestCase;
 use Twig\Loader\ArrayLoader;
 
-class ExtensionTest extends \PHPUnit_Framework_TestCase
+class ExtensionTest extends TestCase
 {
     public function testPageReturned()
     {

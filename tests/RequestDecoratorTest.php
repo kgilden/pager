@@ -12,9 +12,10 @@
 namespace KG\Pager\Tests;
 
 use KG\Pager\RequestDecorator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
+class RequestDecoratorTest extends TestCase
 {
     protected function setUp()
     {
@@ -43,6 +44,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $pager = $this->getMockPager();
         $pager
+            ->expects($this->once())
             ->method('paginate')
             ->with($this->anything(), $this->anything(), 5)
         ;
@@ -61,6 +63,7 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $pager = $this->getMockPager();
         $pager
+            ->expects($this->once())
             ->method('paginate')
             ->with($this->anything(), $this->anything(), 5)
         ;

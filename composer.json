@@ -25,8 +25,9 @@
         "symfony/dependency-injection": "^2.4|^3.0",
         "symfony/http-kernel": "^2.4|^3.0",
         "ruflin/elastica": ">=0.90.1.0",
-        "phpunit/phpunit": "^5.0",
-        "twig/twig": "^1.38|^2.7"
+        "phpunit/phpunit": "^6.0",
+        "twig/twig": "^1.38|^2.7",
+        "symfony/yaml": "^5.1"
     },
     "autoload": {
         "psr-4": {"KG\\Pager\\": "src/"}

@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests;
 
 use KG\Pager\BoundsCheckDecorator;
+use PHPUnit\Framework\TestCase;
 
-class BoundsCheckDecoratorTest extends \PHPUnit_Framework_TestCase
+class BoundsCheckDecoratorTest extends TestCase
 {
     /**
      * @expectedException KG\Pager\Exception\OutOfBoundsException

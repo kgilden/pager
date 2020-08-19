@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\PagingStrategy;
 
 use KG\Pager\PagingStrategy\EquallyPaged;
+use PHPUnit\Framework\TestCase;
 
-class EquallyPagedTest extends \PHPUnit_Framework_TestCase
+class EquallyPagedTest extends TestCase
 {
     /**
      * @dataProvider getTestDataForCount

@@ -3,8 +3,9 @@
 namespace KG\Pager\Tests\Bundle\Doctrine;
 
 use KG\Pager\Bundle\Doctrine\PagerAwareRepositoryFactory;
+use PHPUnit\Framework\TestCase;
 
-class PagerAwareRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
+class PagerAwareRepositoryFactoryTest extends TestCase
 {
     public function testPagerSetToPagerAwareRepositories()
     {

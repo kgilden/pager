@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests;
 
 use KG\Pager\Adapter;
+use PHPUnit\Framework\TestCase;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends TestCase
 {
     public function testCannotBeInstantiated()
     {

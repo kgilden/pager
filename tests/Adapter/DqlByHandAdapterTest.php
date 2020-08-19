@@ -14,8 +14,9 @@ namespace KG\Pager\Adapter\Tests;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use KG\Pager\Adapter\DqlByHandAdapter;
+use PHPUnit\Framework\TestCase;
 
-class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
+class DqlByHandAdapterTest extends TestCase
 {
     protected function setUp()
     {

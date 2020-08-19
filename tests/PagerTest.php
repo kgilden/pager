@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests;
 
 use KG\Pager\Pager;
+use PHPUnit\Framework\TestCase;
 
-class PagerTest extends \PHPUnit_Framework_TestCase
+class PagerTest extends TestCase
 {
     public function testPaginateGetsPage()
     {

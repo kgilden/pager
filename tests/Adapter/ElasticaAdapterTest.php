@@ -3,8 +3,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\ElasticaAdapter;
+use PHPUnit\Framework\TestCase;
 
-class ElasticaAdapterTest extends \PHPUnit_Framework_TestCase
+class ElasticaAdapterTest extends TestCase
 {
     protected function setUp()
     {

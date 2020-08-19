@@ -13,9 +13,10 @@ namespace KG\Pager\Tests\Bundle\EventListener;
 
 use KG\Pager\Bundle\EventListener\OutOfBoundsRedirector;
 use KG\Pager\Exception\OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class OutOfBoundsRedirectorTest extends \PHPUnit_Framework_TestCase
+class OutOfBoundsRedirectorTest extends TestCase
 {
     public function testNotRedirectsIfInvalidException()
     {

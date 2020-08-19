@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\CachedDecorator;
+use PHPUnit\Framework\TestCase;
 
-class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
+class CachedDecoratorTest extends TestCase
 {
     public function testItemCountFetchedOnlyOnce()
     {

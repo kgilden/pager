@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\CallbackDecorator;
+use PHPUnit\Framework\TestCase;
 
-class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
+class CallbackDecoratorTest extends TestCase
 {
     public function testItemCountDelegatedToAdapter()
     {

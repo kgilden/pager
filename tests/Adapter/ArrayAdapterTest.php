@@ -12,8 +12,9 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\ArrayAdapter;
+use PHPUnit\Framework\TestCase;
 
-class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
+class ArrayAdapterTest extends TestCase
 {
     public function testItemCount()
     {

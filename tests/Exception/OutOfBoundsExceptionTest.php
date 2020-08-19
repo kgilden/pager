@@ -3,8 +3,9 @@
 namespace KG\Pager\Tests\Exception;
 
 use KG\Pager\Exception\OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 
-class OutOfBoundsExceptionTest extends \PHPUnit_Framework_TestCase
+class OutOfBoundsExceptionTest extends TestCase
 {
     public function testTestGetPageNumber()
     {
