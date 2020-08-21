@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KG\Pager\Bundle\DependencyInjection;
 
 /*
@@ -52,11 +54,7 @@ class KGPagerExtension extends Extension
         }
     }
 
-    /**
-     * @param string           $name
-     * @param ContainerBuilder $container
-     */
-    private function setDefaultPager($name, ContainerBuilder $container)
+    private function setDefaultPager(string $name, ContainerBuilder $container): void
     {
         $defaultId = sprintf('%s.%s', self::PREFIX_PAGER, $name);
 
@@ -67,11 +65,7 @@ class KGPagerExtension extends Extension
         $container->setAlias('kg_pager', $defaultId);
     }
 
-    /**
-     * @param array            $configs
-     * @param ContainerBuilder $container
-     */
-    private function registerPagers(array $configs, ContainerBuilder $container)
+    private function registerPagers(array $configs, ContainerBuilder $container): void
     {
         $shouldDisableRedirector = true;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -22,20 +24,9 @@ use KG\Pager\PagerInterface;
  */
 class PagerAwareRepositoryFactory implements RepositoryFactory
 {
-    /**
-     * @var RepositoryFactory|null
-     */
-    private $factory;
+    private ?RepositoryFactory $factory;
+    private PagerInterface $pager;
 
-    /**
-     * @var PagerInterface
-     */
-    private $pager;
-
-    /**
-     * @param PagerInterface         $pager
-     * @param RepositoryFactory|null $factory
-     */
     public function __construct(PagerInterface $pager, RepositoryFactory $factory = null)
     {
         $this->factory = $factory;
