@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -15,47 +17,14 @@ use KG\Pager\Adapter\CallbackDecorator;
 
 final class Page implements PageInterface
 {
-    /**
-     * @var AdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * @var PagingStrategyInterface
-     */
-    private $strategy;
-
-    /**
-     * Items of this page + potentially 1 extra item from the next page.
-     *
-     * @var array
-     */
-    private $itemsWithOneExtra;
-
-    /**
-     * @var integer
-     */
-    private $number;
-
-    /**
-     * @var integer|null
-     */
-    private $offset;
-
-    /**
-     * @var integer|null
-     */
-    private $length;
-
-    /**
-     * @var integer
-     */
-    private $perPage;
-
-    /**
-     * @var integer|null
-     */
-    private $itemCount;
+    private AdapterInterface $adapter;
+    private PagingStrategyInterface $strategy;
+    private ?array $itemsWithOneExtra = null; // Items of this page + potentially 1 extra item from the next page.
+    private int $number;
+    private ?int $offset = null;
+    private ?int $length = null;
+    private int $perPage;
+    private ?int $itemCount = null;
 
     /**
      * Page number could be calculated from offset & length, but doing it this
@@ -66,7 +35,7 @@ final class Page implements PageInterface
      * @param integer                 $perPage
      * @param integer                 $number
      */
-    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, $perPage, $number)
+    public function __construct(AdapterInterface $adapter, PagingStrategyInterface $strategy, int $perPage, int $number)
     {
         $this->adapter = $adapter;
         $this->strategy = $strategy;
@@ -77,7 +46,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItems()
+    public function getItems(): array
     {
         return array_slice($this->getItemsWithOneExtra(), 0, $this->getLength());
     }
@@ -85,7 +54,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemsOfAllPages()
+    public function getItemsOfAllPages(): array
     {
         // @todo this is suboptimal - ideally we don't need to know item count
         // to get all items. Instead the entire collection should be returned.
@@ -96,7 +65,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }
@@ -104,10 +73,10 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getNext()
+    public function getNext(): ?PageInterface
     {
         if ($this->isLast()) {
-            return;
+            return null;
         }
 
         return $this->getPage($this->number + 1);
@@ -116,10 +85,10 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPrevious()
+    public function getPrevious(): ?PageInterface
     {
         if ($this->isFirst()) {
-            return;
+            return null;
         }
 
         return $this->getPage($this->number - 1);
@@ -128,7 +97,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isFirst()
+    public function isFirst(): bool
     {
         return 1 === $this->getNumber();
     }
@@ -136,7 +105,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isLast()
+    public function isLast(): bool
     {
         return count($this->getItemsWithOneExtra()) <= $this->getLength();
     }
@@ -144,7 +113,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function isOutOfBounds()
+    public function isOutOfBounds(): bool
     {
         $number = $this->getNumber();
 
@@ -162,7 +131,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPageCount()
+    public function getPageCount(): int
     {
         // Should never allow a scenario with no pages even though this is
         // technically correct. So if no elements were found, the page count
@@ -173,7 +142,7 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return $this->itemCount ?: $this->itemCount = $this->adapter->getItemCount();
     }
@@ -181,17 +150,14 @@ final class Page implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function callback($callback)
+    public function callback(callable $callback): PageInterface
     {
         $adapter = new CallbackDecorator($this->adapter, $callback);
 
         return new self($adapter, $this->strategy, $this->perPage, $this->number);
     }
 
-    /**
-     * @return integer
-     */
-    private function getOffset()
+    private function getOffset(): int
     {
         if (null === $this->offset) {
             list($this->offset, $this->length) = $this->getLimit();
@@ -200,10 +166,7 @@ final class Page implements PageInterface
         return $this->offset;
     }
 
-    /**
-     * @return integer
-     */
-    private function getLength()
+    private function getLength(): int
     {
         if (null === $this->length) {
             list($this->offset, $this->length) = $this->getLimit();
@@ -217,7 +180,7 @@ final class Page implements PageInterface
      *
      * @return integer[]
      */
-    private function getLimit()
+    private function getLimit(): array
     {
         return $this->strategy->getLimit($this->adapter, $this->getNumber(), $this->perPage);
     }
@@ -229,7 +192,7 @@ final class Page implements PageInterface
      *
      * @return array
      */
-    private function getItemsWithOneExtra()
+    private function getItemsWithOneExtra(): array
     {
         if (null === $this->itemsWithOneExtra) {
             $this->itemsWithOneExtra = $this
@@ -243,12 +206,8 @@ final class Page implements PageInterface
 
     /**
      * Creates a new page with the given number.
-     *
-     * @param integer $number
-     *
-     * @return Page
      */
-    private function getPage($number)
+    private function getPage(int $number): Page
     {
         return new self($this->adapter, $this->strategy, $this->perPage, $number);
     }

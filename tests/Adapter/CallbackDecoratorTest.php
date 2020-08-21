@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -12,12 +14,14 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\CallbackDecorator;
+use KG\Pager\AdapterInterface;
+use PHPUnit\Framework\TestCase;
 
-class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
+class CallbackDecoratorTest extends TestCase
 {
-    public function testItemCountDelegatedToAdapter()
+    public function testItemCountDelegatedToAdapter(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter->method('getItemCount')->willReturn(42);
 
         $decorator = new CallbackDecorator($adapter, function (array $items) {
@@ -27,9 +31,9 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $decorator->getItemCount());
     }
 
-    public function testCallbacksAppliedToItems()
+    public function testCallbacksAppliedToItems(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->method('getItems')
             ->with(0, 2)
@@ -43,9 +47,9 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(4, 8), $decorator->getItems(0, 2));
     }
 
-    public function testMultipleCallbacksAppliedInOrder()
+    public function testMultipleCallbacksAppliedInOrder(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->method('getItems')
             ->with(0, 2)
@@ -66,12 +70,11 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(8, 12), $decorator->getItems(0, 2));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
-    public function testGetItemsFailsIfItemCountDifferentAfterCallback()
+    public function testGetItemsFailsIfItemCountDifferentAfterCallback(): void
     {
-        $adapter = $this->getMockAdapter();
+        $this->expectException(\LogicException::class);
+
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->method('getItems')
             ->willReturn(array(1, 2))
@@ -83,10 +86,5 @@ class CallbackDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $decorator = new CallbackDecorator($adapter, $fn);
         $decorator->getItems(0, 2);
-    }
-
-    private function getMockAdapter()
-    {
-        return $this->getMock('KG\Pager\AdapterInterface');
     }
 }

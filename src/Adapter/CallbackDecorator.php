@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -18,21 +20,10 @@ use KG\Pager\AdapterInterface;
  */
 final class CallbackDecorator implements AdapterInterface
 {
-    /**
-     * @var AdapterInterface
-     */
-    private $adapter;
+    private AdapterInterface $adapter;
+    private array $callbacks;
 
-    /**
-     * @var \Callable[]
-     */
-    private $callbacks;
-
-    /**
-     * @param AdapterInterface $adapter
-     * @param \Callable        $callback
-     */
-    public function __construct(AdapterInterface $adapter, $callback)
+    public function __construct(AdapterInterface $adapter, callable $callback)
     {
         // Flatten multiple callback decorators into a single one.
         if ($adapter instanceof self) {
@@ -40,7 +31,7 @@ final class CallbackDecorator implements AdapterInterface
             $callbacks[] = $callback;
             $adapter = $adapter->adapter;
         } else {
-            $callbacks = array($callback);
+            $callbacks = [$callback];
         }
 
         $this->adapter = $adapter;
@@ -50,7 +41,7 @@ final class CallbackDecorator implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return $this->adapter->getItemCount();
     }
@@ -58,7 +49,7 @@ final class CallbackDecorator implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         $items = $this->adapter->getItems($offset, $limit);
 

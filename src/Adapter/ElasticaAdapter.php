@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -30,14 +32,9 @@ use KG\Pager\AdapterInterface;
  */
 class ElasticaAdapter implements AdapterInterface
 {
-    /**
-     * @var Search
-     */
-    private $search;
+    private Search $search;
 
     /**
-     * @param Search $search
-     *
      * @api
      */
     public function __construct(Search $search)
@@ -51,7 +48,7 @@ class ElasticaAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return $this->search->count();
     }
@@ -61,7 +58,7 @@ class ElasticaAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         $query = $this->search->getQuery();
         $query->setFrom($offset);

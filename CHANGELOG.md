@@ -1,6 +1,12 @@
 Changelog
 =========
 
+### 2.0.0 (unreleased)
+
+* Bump minimum required PHP version to 7.4.
+* The library now enforces PHP7 types. Code not respecting previous docblock
+  type hints might break.
+
 ### 1.2.1 (2020-02-21)
 
 * Added Twig extension.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -33,13 +35,9 @@ final class Adapter
     /**
      * It's named "_array", because "array" is a reserved keyword.
      *
-     * @param array $array
-     *
-     * @return ArrayAdapter
-     *
      * @api
      */
-    public static function _array(array $array)
+    public static function _array(array $array): AdapterInterface
     {
         return new ArrayAdapter($array);
     }
@@ -48,11 +46,9 @@ final class Adapter
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query
      * @param boolean                                        $fetchJoinCollection
      *
-     * @return DqlAdapter
-     *
      * @api
      */
-    public static function dql($query, $fetchJoinCollection = true)
+    public static function dql($query, bool $fetchJoinCollection = true): AdapterInterface
     {
         return DqlAdapter::fromQuery($query, $fetchJoinCollection);
     }
@@ -61,35 +57,25 @@ final class Adapter
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $countQuery
      *
-     * @return DqlByHandAdapter
-     *
      * @api
      */
-    public static function dqlByHand($query, $countQuery)
+    public static function dqlByHand($query, $countQuery): AdapterInterface
     {
         return new DqlByHandAdapter($query, $countQuery);
     }
 
     /**
-     * @param Search $search
-     *
-     * @return ElasticaAdapter
-     *
      * @api
      */
-    public static function elastica(Search $search)
+    public static function elastica(Search $search): AdapterInterface
     {
         return new ElasticaAdapter($search);
     }
 
     /**
-     * @param \MongoCursor $cursor
-     *
-     * @return MongoAdapter
-     *
      * @api
      */
-    public static function mongo(\MongoCursor $cursor)
+    public static function mongo(\MongoCursor $cursor): AdapterInterface
     {
         return new MongoAdapter($cursor);
     }

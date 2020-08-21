@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -28,13 +30,7 @@ interface PagerInterface
      * and `$itemsPerPage` automatically. However, the arguments explicitly
      * passed must take precedence over any implicit solutions.
      *
-     * @param AdapterInterface $adapter
-     * @param integer|null     $itemsPerPage
-     * @param integer|null     $page
-     *
-     * @return PageInterface
-     *
      * @api
      */
-    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null);
+    public function paginate(AdapterInterface $adapter, ?int $itemsPerPage = null, ?int $page = null): PageInterface;
 }

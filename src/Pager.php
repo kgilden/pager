@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -16,24 +18,14 @@ use KG\Pager\PagingStrategy\EquallyPaged;
 
 final class Pager implements PagerInterface
 {
-    /**
-     * @var PagingStrategyInterface
-     */
-    private $strategy;
-
-    /**
-     * @var integer
-     */
-    private $perPage;
+    private PagingStrategyInterface $strategy;
+    private int $perPage;
 
     /**
      * Creates a new pager. Default strategy "equally paged" is used, if a
      * strategy is not specified.
-     *
-     * @param integer|null                 $perPage
-     * @param PagingStrategyInterface|null $strategy
      */
-    public function __construct($perPage = null, PagingStrategyInterface $strategy = null)
+    public function __construct(?int $perPage = null, ?PagingStrategyInterface $strategy = null)
     {
         $this->perPage = $perPage ?: 25;
         $this->strategy = $strategy ?: new EquallyPaged();
@@ -42,7 +34,7 @@ final class Pager implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null)
+    public function paginate(AdapterInterface $adapter, ?int $itemsPerPage = null, ?int $page = null): PageInterface
     {
         return new Page(new CachedDecorator($adapter), $this->strategy, $itemsPerPage ?: $this->perPage, $page ?: 1);
     }

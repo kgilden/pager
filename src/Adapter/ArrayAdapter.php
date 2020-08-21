@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -21,14 +23,9 @@ use KG\Pager\AdapterInterface;
  */
 final class ArrayAdapter implements AdapterInterface
 {
-    /**
-     * @var array
-     */
-    private $items;
+    private array $items;
 
     /**
-     * @param array $items
-     *
      * @api
      */
     public function __construct(array $items)
@@ -41,7 +38,7 @@ final class ArrayAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return count($this->items);
     }
@@ -51,7 +48,7 @@ final class ArrayAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         return array_slice($this->items, $offset, $limit);
     }

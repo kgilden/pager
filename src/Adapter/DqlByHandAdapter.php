@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,6 +13,7 @@
 
 namespace KG\Pager\Adapter;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -30,15 +33,8 @@ use KG\Pager\AdapterInterface;
  */
 final class DqlByHandAdapter implements AdapterInterface
 {
-    /**
-     * @var Query
-     */
-    private $countQuery;
-
-    /**
-     * @var DqlAdapter
-     */
-    private $adapter;
+    private AbstractQuery $countQuery;
+    private AdapterInterface $adapter;
 
     /**
      * @param Query|QueryBuilder $limitQuery
@@ -47,7 +43,7 @@ final class DqlByHandAdapter implements AdapterInterface
      *
      * @api
      */
-    public function __construct($limitQuery, $countQuery, $fetchJoinCollection = true)
+    public function __construct($limitQuery, $countQuery, bool $fetchJoinCollection = true)
     {
         if ($countQuery instanceof QueryBuilder) {
             $countQuery = $countQuery->getQuery();
@@ -62,7 +58,7 @@ final class DqlByHandAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         try {
             return array_sum(array_map('current', $this->countQuery->getScalarResult()));
@@ -76,7 +72,7 @@ final class DqlByHandAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         return $this->adapter->getItems($offset, $limit);
     }

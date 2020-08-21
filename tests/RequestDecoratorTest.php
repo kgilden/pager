@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,105 +13,92 @@
 
 namespace KG\Pager\Tests;
 
+use KG\Pager\AdapterInterface;
+use KG\Pager\PageInterface;
+use KG\Pager\PagerInterface;
 use KG\Pager\RequestDecorator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-class RequestDecoratorTest extends \PHPUnit_Framework_TestCase
+class RequestDecoratorTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
+        if (!class_exists(Request::class)) {
             $this->markTestSkipped('symfony/http-foundation must be installed to run this test');
         }
     }
 
-    public function testPagianteGetsPage()
+    public function testPagianteGetsPage(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
 
-        $pager = $this->getMockPager();
+        $pager = $this->createMock(PagerInterface::class);
         $pager
             ->method('paginate')
             ->with($adapter, null, null)
-            ->willReturn($expected = $this->getMockPage())
+            ->willReturn($expected = $this->createMock(PageInterface::class))
         ;
 
-        $decorated = new RequestDecorator($pager, $this->getMockRequestStack());
+        $decorated = new RequestDecorator($pager, $this->createMock(RequestStack::class));
 
         $this->assertSame($expected, $decorated->paginate($adapter));
     }
 
-    public function testPaginateInfersCurrentPageFromRequest()
+    public function testPaginateInfersCurrentPageFromRequest(): void
     {
-        $pager = $this->getMockPager();
+        $pager = $this->createMock(PagerInterface::class);
         $pager
+            ->expects($this->once())
             ->method('paginate')
             ->with($this->anything(), $this->anything(), 5)
         ;
 
-        $stack = $this->getMockRequestStack();
+        $stack = $this->createMock(RequestStack::class);
         $stack
             ->method('getCurrentRequest')
-            ->willReturn(new Request(array('page' => 5)))
+            ->willReturn(new Request(['page' => 5]))
         ;
 
         $decorated = new RequestDecorator($pager, $stack);
-        $decorated->paginate($this->getMockAdapter());
+        $decorated->paginate($this->createMock(AdapterInterface::class));
     }
 
-    public function testCustomKeyUsed()
+    public function testCustomKeyUsed(): void
     {
-        $pager = $this->getMockPager();
+        $pager = $this->createMock(PagerInterface::class);
         $pager
+            ->expects($this->once())
             ->method('paginate')
             ->with($this->anything(), $this->anything(), 5)
         ;
 
-        $stack = $this->getMockRequestStack();
+        $stack = $this->createMock(RequestStack::class);
         $stack
             ->method('getCurrentRequest')
-            ->willReturn(new Request(array('foo' => 5)))
+            ->willReturn(new Request(['foo' => 5]))
         ;
 
         $decorated = new RequestDecorator($pager, $stack, 'foo');
-        $decorated->paginate($this->getMockAdapter());
+        $decorated->paginate($this->createMock(AdapterInterface::class));
     }
 
-    public function testPassedPageOverridesInferredCurrentPage()
+    public function testPassedPageOverridesInferredCurrentPage(): void
     {
-        $pager = $this->getMockPager();
+        $pager = $this->createMock(PagerInterface::class);
         $pager
             ->method('paginate')
             ->with($this->anything(), $this->anything(), 3)
         ;
 
-        $stack = $this->getMockRequestStack();
+        $stack = $this->createMock(RequestStack::class);
         $stack
             ->expects($this->never())
             ->method('getCurrentRequest')
         ;
 
         $decorated = new RequestDecorator($pager, $stack);
-        $decorated->paginate($this->getMockAdapter(), null, 3);
-    }
-
-    private function getMockAdapter()
-    {
-        return $this->getMock('KG\Pager\AdapterInterface');
-    }
-
-    private function getMockPage()
-    {
-        return $this->getMock('KG\Pager\PageInterface');
-    }
-
-    private function getMockPager()
-    {
-        return $this->getMock('KG\Pager\PagerInterface');
-    }
-
-    private function getMockRequestStack()
-    {
-        return $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        $decorated->paginate($this->createMock(AdapterInterface::class), null, 3);
     }
 }

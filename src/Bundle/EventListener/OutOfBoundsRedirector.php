@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -21,13 +23,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 final class OutOfBoundsRedirector
 {
     /**
-     * @param GetResponseForExceptionEvent $event
-     *
-     * @return RedirectResponse|null
-     *
      * @throws \LogicException If the current page is inside the page range
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
 

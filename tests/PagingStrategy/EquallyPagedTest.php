@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,52 +13,49 @@
 
 namespace KG\Pager\Tests\PagingStrategy;
 
+use KG\Pager\AdapterInterface;
 use KG\Pager\PagingStrategy\EquallyPaged;
+use PHPUnit\Framework\TestCase;
 
-class EquallyPagedTest extends \PHPUnit_Framework_TestCase
+class EquallyPagedTest extends TestCase
 {
     /**
      * @dataProvider getTestDataForCount
      */
-    public function testCount($itemCount, $perPage, $expectedCount)
+    public function testCount(int $itemCount, int $perPage, int $expectedCount): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter->method('getItemCount')->willReturn($itemCount);
 
         $strategy = new EquallyPaged();
         $this->assertEquals($expectedCount, $strategy->getCount($adapter, 1, $perPage));
     }
 
-    public function getTestDataForCount()
+    public function getTestDataForCount(): array
     {
-        return array(
-            array(2, 2, 1),
-            array(0, 2, 0),
-            array(3, 2, 2),
-            array(4, 2, 2),
-            array(5, 1, 5),
-        );
+        return [
+            [2, 2, 1],
+            [0, 2, 0],
+            [3, 2, 2],
+            [4, 2, 2],
+            [5, 1, 5],
+        ];
     }
 
     /**
      * @dataProvider getTestDataForLimit
      */
-    public function testGetLimit($perPage, $page, $expectedLimit)
+    public function testGetLimit(int $perPage, int $page, array $expectedLimit): void
     {
         $strategy = new EquallyPaged();
-        $this->assertEquals($expectedLimit, $strategy->getLimit($this->getMockAdapter(), $page, $perPage));
+        $this->assertEquals($expectedLimit, $strategy->getLimit($this->createMock(AdapterInterface::class), $page, $perPage));
     }
 
     public function getTestDataForLimit()
     {
-        return array(
-            array(5, 1, array(0, 5)),
-            array(3, 2, array(3, 3)),
-        );
-    }
-
-    private function getMockAdapter()
-    {
-        return $this->getMock('KG\Pager\AdapterInterface');
+        return [
+            [5, 1, [0, 5]],
+            [3, 2, [3, 3]],
+        ];
     }
 }

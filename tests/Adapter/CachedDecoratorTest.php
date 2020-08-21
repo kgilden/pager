@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -12,12 +14,14 @@
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\CachedDecorator;
+use KG\Pager\AdapterInterface;
+use PHPUnit\Framework\TestCase;
 
-class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
+class CachedDecoratorTest extends TestCase
 {
-    public function testItemCountFetchedOnlyOnce()
+    public function testItemCountFetchedOnlyOnce(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
 
         $adapter
             ->expects($this->once())
@@ -31,9 +35,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $decorator->getItemCount());
     }
 
-    public function testGetItemsNotCached()
+    public function testGetItemsNotCached(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->expects($this->once())
             ->method('getItems')
@@ -46,9 +50,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $decorator->getItems(8, 4));
     }
 
-    public function testLessItemsFoundThanAskedFor()
+    public function testLessItemsFoundThanAskedFor(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->expects($this->once())
             ->method('getItems')
@@ -65,9 +69,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
      * This makes sure the decorator won't go asking for the same range of
      * items again, if the first query returned nothing.
      */
-    public function testNullResultsCached()
+    public function testNullResultsCached(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->expects($this->once())
             ->method('getItems')
@@ -80,9 +84,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $decorator->getItems(4, 5));
     }
 
-    public function testNoExtraCallsMadeIfPreviousItemWasAlreadyNotFound()
+    public function testNoExtraCallsMadeIfPreviousItemWasAlreadyNotFound(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->expects($this->once())
             ->method('getItems')
@@ -94,9 +98,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
         $decorator->getItems(9, 5);
     }
 
-    public function testSupportsNullItems()
+    public function testSupportsNullItems(): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
         $adapter
             ->method('getItems')
             ->willReturn($expected = array(null, null))
@@ -111,9 +115,9 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTestsForCachingSystem
      */
-    public function testCachingSystem($targetLimits, $expectedLimits)
+    public function testCachingSystem(array $targetLimits, array $expectedLimits): void
     {
-        $adapter = $this->getMockAdapter();
+        $adapter = $this->createMock(AdapterInterface::class);
 
         foreach ($expectedLimits as $i => $expectedLimit) {
             list($offset, $length) = $expectedLimit;
@@ -147,58 +151,51 @@ class CachedDecoratorTest extends \PHPUnit_Framework_TestCase
      *
      *  - items marked by "=" are expected to be retrieved from the decorator;
      *  - items enclosed in brackets are expected to be retrieved from the adapter;
-     *
-     * @return array
      */
-    public function getTestsForCachingSystem()
+    public function getTestsForCachingSystem(): array
     {
-        return array(
-            array(
+        return [
+            [
                 //  06  07  08  09  10  11  12  13  - items
                 //         [==============]         - 1st query
                 //             ============         - 2nd query
                 //         ============             - 3rd query
                 //             ========             - 4th query
-                array(array(8, 4), array(9, 3), array(8, 3), array(9, 2)),
-                array(array(8, 4)),
-            ),
-            array(
+                [[8, 4], [9, 3], [8, 3], [9, 2]],
+                [[8, 4]],
+            ],
+            [
                 //  06  07  08  09  10  11  12  13  - items
                 //         [==============]         - 1st query
                 // [======]========                 - 2nd query
                 //                 ========[======] - 3rd query
-                array(array(8, 4), array(6, 4), array(10, 4)),
-                array(array(8, 4), array(6, 2), array(12, 2)),
-            ),
-            array(
+                [[8, 4], [6, 4], [10, 4]],
+                [[8, 4], [6, 2], [12, 2]],
+            ],
+            [
                 //  06  07  08  09  10  11  12  13  - items
                 // [======]                         - 1st query
                 //                         [======] - 2nd query
                 //     ====[==============]====     - 3rd query
-                array(array(6, 2), array(12, 2), array(7, 6)),
-                array(array(6, 2), array(12, 2), array(8, 4)),
-            ),
-            array(
+                [[6, 2], [12, 2], [7, 6]],
+                [[6, 2], [12, 2], [8, 4]],
+            ],
+            [
                 //  06  07  08  09  10  11  12  13  - items
                 // [======]                         - 1st query
                 //                         [======] - 2nd query
                 //             [==]                 - 3rd query
                 //     ====[==============]====     - 4th query
-                array(array(6, 2), array(12, 2), array(9, 1), array(7, 6)),
-                array(array(6, 2), array(12, 2), array(9, 1), array(8, 4)),
-            ),
-            array(
+                [[6, 2], [12, 2], [9, 1], [7, 6]],
+                [[6, 2], [12, 2], [9, 1], [8, 4]],
+            ],
+            [
                 //  06  07  08  09  10  11  12  13  - items
                 //             [======]             - 1st query
                 //         [==============]         - 2nd query
-                array(array(9, 2), array(8, 4)),
-                array(array(9, 2), array(8, 4)),
-            ),
-        );
-    }
-
-    private function getMockAdapter()
-    {
-        return $this->getMock('KG\Pager\AdapterInterface');
+                [[9, 2], [8, 4]],
+                [[9, 2], [8, 4]],
+            ],
+        ];
     }
 }

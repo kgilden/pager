@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,35 +13,41 @@
 
 namespace KG\Pager\Adapter\Tests;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use KG\Pager\Adapter\DqlAdapter;
 use KG\Pager\Adapter\DqlByHandAdapter;
+use KG\Pager\AdapterInterface;
+use PHPUnit\Framework\TestCase;
 
-class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
+class DqlByHandAdapterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (!class_exists('Doctrine\ORM\Query')) {
+        if (!class_exists(AbstractQuery::class)) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');
         }
     }
 
     public function testSupportsQueryBuilders()
     {
-        $mainQb = $this->getMockQueryBuilder();
-        $countQb = $this->getMockQueryBuilder();
+        $mainQb = $this->createMock(QueryBuilder::class);
+        $countQb = $this->createMock(QueryBuilder::class);
 
-        foreach (array($mainQb, $countQb) as $qb) {
+        foreach ([$mainQb, $countQb] as $qb) {
             $qb
                 ->expects($this->once())
                 ->method('getQuery')
+                ->willReturn($this->createMock(AbstractQuery::class))
             ;
         }
 
         $adapter = new DqlByHandAdapter($mainQb, $countQb);
     }
 
-    public function testGetItemCountReturnsNullIfNoResultFound()
+    public function testGetItemCountReturnsNullIfNoResultFound(): void
     {
         $countQuery = $this->getMockQuery();
         $countQuery
@@ -53,19 +61,19 @@ class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $adapter->getItemCount());
     }
 
-    public function testItemCountSumsAllRows()
+    public function testItemCountSumsAllRows(): void
     {
         $countQuery = $this->getMockQuery();
         $countQuery
             ->method('getScalarResult')
-            ->willReturn(array_fill(0, 3, array(5)))
+            ->willReturn(array_fill(0, 3, [5]))
         ;
 
         $adapter = new DqlByHandAdapter($this->getMockQuery(), $countQuery);
         $this->assertEquals(15, $adapter->getItemCount());
     }
 
-    public function testGetItemsDelegatesToAdapter()
+    public function testGetItemsDelegatesToAdapter(): void
     {
         $adapter = new DqlByHandAdapter($this->getMockQuery(), $this->getMockQuery());
 
@@ -73,29 +81,24 @@ class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
         $property = $class->getProperty('adapter');
         $property->setAccessible(true);
 
-        $this->assertInstanceOf('KG\Pager\Adapter\DqlAdapter', $property->getValue($adapter));
-        $property->setValue($adapter, $parent = $this->getMockAdapter());
+        $this->assertInstanceOf(DqlAdapter::class, $property->getValue($adapter));
+        $property->setValue($adapter, $parent = $this->createMock(AdapterInterface::class));
 
         $parent
             ->expects($this->once())
             ->method('getItems')
             ->with(5, 10)
-            ->willReturn($expected = array_fill(0, 10, array('id' => 5, 'foo' => 'bar')))
+            ->willReturn($expected = array_fill(0, 10, ['id' => 5, 'foo' => 'bar']))
         ;
 
         $this->assertSame($expected, $adapter->getItems(5, 10));
     }
 
-    private function getMockAdapter()
-    {
-        return $this->getMock('KG\Pager\AdapterInterface');
-    }
-
     private function getMockQuery()
     {
         return $this
-            ->getMockBuilder('\Doctrine\ORM\AbstractQuery')
-            ->setMethods(array(
+            ->getMockBuilder(AbstractQuery::class)
+            ->setMethods([
                 'getHydrationMode',
                 'getQuery',
                 'getResult',
@@ -103,18 +106,9 @@ class DqlByHandAdapterTest extends \PHPUnit_Framework_TestCase
                 'setFirstResult',
                 'setMaxResults',
                 'setParameter',
-            ))
+            ])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
-        ;
-    }
-
-    private function getMockQueryBuilder()
-    {
-        return $this
-            ->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock()
         ;
     }
 }

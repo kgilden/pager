@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -19,74 +21,77 @@ namespace KG\Pager;
 interface PageInterface
 {
     /**
-     * @return array The items of this page
+     * Returns all items of the current page.
      *
      * @api
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
-     * @return array Items from all of the pages
+     * Returns all items from all pages.
      *
      * @api
      */
-    public function getItemsOfAllPages();
+    public function getItemsOfAllPages(): array;
 
     /**
-     * @return integer 1-indexed number of this page within the page collection
+     * Returns the 1-index number of the current page.
      *
      * @api
      */
-    public function getNumber();
+    public function getNumber(): int;
 
     /**
-     * @return PageInterface|null Next page or null, if this is the last page
+     * Gets the next page or null, if this is the last page.
      *
      * @api
      */
-    public function getNext();
+    public function getNext(): ?PageInterface;
 
     /**
-     * @return PageInterface|null Previous page or null, if this is the first page
+     * Gets the previous page or null, if this is the first page.
      *
      * @api
      */
-    public function getPrevious();
+    public function getPrevious(): ?PageInterface;
 
     /**
-     * @return boolean Whether it's the first page
+     * Whether this is the first page.
      *
      * @api
      */
-    public function isFirst();
+    public function isFirst(): bool;
 
     /**
-     * @return boolean Whether it's the last page
+     * Whether this is the last page.
      *
      * @api
      */
-    public function isLast();
+    public function isLast(): bool;
 
     /**
-     * @return boolean Whether this page is out of the paged range
+     * Whether this page is out of the paged range.
+     *
+     * It means that the current page represents a page for which there are
+     * actually no items.
      *
      * @api
      */
-    public function isOutOfBounds();
+    public function isOutOfBounds(): bool;
 
     /**
-     * @return integer The total number of pages the set was split into
+     * The total number of pages the items were split into.
      *
      * @api
      */
-    public function getPageCount();
+    public function getPageCount(): int;
 
     /**
-     * @return integer The total number of items across all pages
+     * The total number of items accross all pages.
      *
      * @api
      */
-    public function getItemCount();
+    public function getItemCount(): int;
 
     /**
      * Adds a callback to the page to be applied to all found items whenever
@@ -94,11 +99,9 @@ interface PageInterface
      * callback. This MAY be the current page object, but also a completely
      * new object.
      *
-     * @param \Callable $callback A callback to modify items of this page
-     *
-     * @return PageInterface
+     * The $callback is a callback to modify items of this page.
      *
      * @api
      */
-    public function callback($callback);
+    public function callback(callable $callback): PageInterface;
 }

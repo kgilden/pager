@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -17,8 +19,6 @@ interface PagerAwareInterface
 {
     /**
      * Sets the given pager to this object.
-     *
-     * @param PagerInterface $pager
      */
-    public function setPager(PagerInterface $pager);
+    public function setPager(PagerInterface $pager): void;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -16,27 +18,21 @@ use KG\Pager\PagerInterface;
 
 class Extension extends \Twig_Extension
 {
-    /**
-     * @var PagerInterface
-     */
-    private $pager;
+    private PagerInterface $pager;
 
-    /**
-     * @param PagerInterface $pager
-     */
     public function __construct(PagerInterface $pager)
     {
         $this->pager = $pager;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array(
             new \Twig_SimpleFunction('paged', array($this, 'paged')),
         );
     }
 
-    public function paged(array $items, $itemsPerPage = null, $page = null)
+    public function paged(array $items, int $itemsPerPage = null, int $page = null)
     {
         return $this->pager->paginate(Adapter::_array($items), $itemsPerPage, $page);
     }

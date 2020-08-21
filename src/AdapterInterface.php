@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -28,7 +30,7 @@ interface AdapterInterface
      *
      * @api
      */
-    public function getItemCount();
+    public function getItemCount(): int;
 
     /**
      * @param integer $offset Index of the 1-st item to be returned
@@ -38,5 +40,5 @@ interface AdapterInterface
      *
      * @api
      */
-    public function getItems($offset, $limit);
+    public function getItems(int $offset, int $limit): array;
 }

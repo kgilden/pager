@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,93 +13,73 @@
 
 namespace KG\Pager\Tests;
 
+use Doctrine\ORM\AbstractQuery;
+use Elastica\Query;
+use Elastica\Search;
 use KG\Pager\Adapter;
+use KG\Pager\Adapter\ArrayAdapter;
+use KG\Pager\Adapter\DqlAdapter;
+use KG\Pager\Adapter\DqlByHandAdapter;
+use KG\Pager\Adapter\ElasticaAdapter;
+use KG\Pager\Adapter\MongoAdapter;
+use MongoCursor;
+use PHPUnit\Framework\TestCase;
 
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends TestCase
 {
-    public function testCannotBeInstantiated()
+    public function testCannotBeInstantiated(): void
     {
-        $reflection = new \ReflectionClass('KG\Pager\Adapter');
+        $reflection = new \ReflectionClass(Adapter::class);
         $constructor = $reflection->getConstructor();
         $this->assertFalse($constructor->isPublic());
     }
 
-    public function testArray()
+    public function testArray(): void
     {
-        $this->assertInstanceOf('KG\Pager\Adapter\ArrayAdapter', Adapter::_array(array()));
+        $this->assertInstanceOf(ArrayAdapter::class, Adapter::_array(array()));
     }
 
-    public function testDql()
+    public function testDql(): void
     {
-        if (!class_exists('Doctrine\ORM\Query')) {
+        if (!class_exists(AbstractQuery::class)) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');
         }
 
-        $query = $this->getMockQuery();
-        $this->assertInstanceOf('KG\Pager\Adapter\DqlAdapter', Adapter::dql($query));
+        $query = $this->createMock(AbstractQuery::class);
+        $this->assertInstanceOf(DqlAdapter::class, Adapter::dql($query));
     }
 
-    public function testDqlByHand()
+    public function testDqlByHand(): void
     {
-        if (!class_exists('Doctrine\ORM\Query')) {
+        if (!class_exists(AbstractQuery::class)) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');
         }
 
-        $a = $this->getMockQuery();
-        $b = $this->getMockQuery();
+        $a = $this->createMock(AbstractQuery::class);
+        $b = $this->createMock(AbstractQuery::class);
 
-        $this->assertInstanceOf('KG\Pager\Adapter\DqlByHandAdapter', Adapter::dqlByHand($a, $b));
+        $this->assertInstanceOf(DqlByHandAdapter::class, Adapter::dqlByHand($a, $b));
     }
 
-    public function testElastica()
+    public function testElastica(): void
     {
-        if (!class_exists('Elastica\Search')) {
+        if (!class_exists(Search::class)) {
             $this->markTestSkipped('ruflin/elastica must be installed to run this test');
         }
 
-        $this->assertInstanceOf('KG\Pager\Adapter\ElasticaAdapter', Adapter::elastica($this->getMockSearch()));
+        $search = $this->createConfiguredMock(Search::class, [
+            'getQuery' => $this->createMock(Query::class),
+        ]);
+
+        $this->assertInstanceOf(ElasticaAdapter::class, Adapter::elastica($search));
     }
 
-    public function testMongo()
+    public function testMongo(): void
     {
-        if (!class_exists('\MongoCursor')) {
+        if (!class_exists(MongoCursor::class)) {
             $this->markTestSkipped('ext/mongodb must be installed to run this test');
         }
 
-        $this->assertInstanceOf('KG\Pager\Adapter\MongoAdapter', Adapter::mongo($this->getMockCursor()));
-    }
-
-    private function getMockCursor()
-    {
-        return $this
-            ->getMockBuilder('\MongoCursor')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-    }
-
-    private function getMockQuery()
-    {
-        return $this
-            ->getMockBuilder('\Doctrine\ORM\AbstractQuery')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass()
-        ;
-    }
-
-    public function getMockSearch()
-    {
-        $search = $this
-            ->getMockBuilder('Elastica\Search')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        $search
-            ->method('getQuery')
-            ->willReturn($this->getMock('Elastica\Query'))
-        ;
-
-        return $search;
+        $this->assertInstanceOf(MongoAdapter::class, Adapter::mongo($this->createMock(MongoCursor::class)));
     }
 }

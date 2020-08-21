@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -13,13 +15,15 @@ namespace KG\Pager\Tests\Bundle\EventListener;
 
 use KG\Pager\Bundle\EventListener\OutOfBoundsRedirector;
 use KG\Pager\Exception\OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
-class OutOfBoundsRedirectorTest extends \PHPUnit_Framework_TestCase
+class OutOfBoundsRedirectorTest extends TestCase
 {
-    public function testNotRedirectsIfInvalidException()
+    public function testNotRedirectsIfInvalidException(): void
     {
-        $event = $this->getMockEvent();
+        $event = $this->createMock(GetResponseForExceptionEvent::class);
         $event->method('getException')->willReturn(new \Exception());
         $event->expects($this->never())->method('setResponse');
 
@@ -29,11 +33,11 @@ class OutOfBoundsRedirectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTestData
      */
-    public function testRedirection($pageNumber, $pageCount, $expectedPage)
+    public function testRedirection(int $pageNumber, int $pageCount, ?int $expectedPage): void
     {
         $request = Request::create('http://example.com/?a=2&page=' . $pageNumber);
 
-        $event = $this->getMockEvent();
+        $event = $this->createMock(GetResponseForExceptionEvent::class);
         $event->method('getRequest')->willReturn($request);
         $event->method('getException')->willReturn(new OutOfBoundsException($pageNumber, $pageCount));
 
@@ -58,22 +62,13 @@ class OutOfBoundsRedirectorTest extends \PHPUnit_Framework_TestCase
         $redirector->onKernelException($event);
     }
 
-    public function getTestData()
+    public function getTestData(): array
     {
-        return array(
-            array(3, 2, 2), // redirect to last page, if current page higher
-            array(0, 2, 1), // redirect to first page, if current page is not positive
-            array(2, 0, null), // don't redirect, if no pages exist
-            array(2, 4, null), // don't redirect, if the current page is inside the page range
-        );
-    }
-
-    private function getMockEvent()
-    {
-        return $this
-            ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        return [
+            [3, 2, 2], // redirect to last page, if current page higher
+            [0, 2, 1], // redirect to first page, if current page is not positive
+            [2, 0, null], // don't redirect, if no pages exist
+            [2, 4, null], // don't redirect, if the current page is inside the page range
+        ];
     }
 }

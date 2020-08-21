@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KG\Pager\Tests\Adapter;
 
 use KG\Pager\Adapter\MongoAdapter;
+use PHPUnit\Framework\TestCase;
+use MongoCursor;
 
-class MongoAdapterTest extends \PHPUnit_Framework_TestCase
+class MongoAdapterTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (!class_exists('\MongoCursor')) {
+        if (!class_exists(MongoCursor::class)) {
             $this->markTestSkipped('ext/mongodb must be installed to run this test');
         }
     }
 
-    public function testGetItemCountDelegatesToCount()
+    public function testGetItemCountDelegatesToCount(): void
     {
-        $cursor = $this->getMockCursor();
+        $cursor = $this->createMock(Cursor::class);
 
         $cursor
             ->expects($this->once())
@@ -27,9 +31,9 @@ class MongoAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $adapter->getItemCount());
     }
 
-    public function testGetItemsDelegatesToCursor()
+    public function testGetItemsDelegatesToCursor(): void
     {
-        $cursor = $this->getMockCursor();
+        $cursor = $this->createMock(Cursor::class);
 
         $cursor
             ->expects($this->once())
@@ -43,38 +47,29 @@ class MongoAdapterTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(2))
         ;
 
-        $this->mockIterator($cursor, $expected = array('foo', 'bar'));
+        $this->mockIterator($cursor, $expected = ['foo', 'bar']);
 
         $adapter = new MongoAdapter($cursor);
         $this->assertEquals($expected, $adapter->getItems(10, 2));
     }
 
-    private function getMockCursor()
-    {
-        return $this
-            ->getMockBuilder('\MongoCursor')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-    }
-
-    private function mockIterator($mock, $values)
+    private function mockIterator($mock, $values): void
     {
         $iterator = new \ArrayIterator($values);
 
-        $methodsToMock = array(
+        $methodsToMock = [
             'current',
             'key',
             'next',
             'rewind',
             'valid',
-        );
+        ];
 
         foreach ($methodsToMock as $methodToMock) {
             $mock
                 ->method($methodToMock)
                 ->will($this->returnCallback(function () use ($iterator, $methodToMock) {
-                    return call_user_func_array(array($iterator, $methodToMock), func_get_args());
+                    return call_user_func_array([$iterator, $methodToMock], func_get_args());
                 }))
             ;
         }

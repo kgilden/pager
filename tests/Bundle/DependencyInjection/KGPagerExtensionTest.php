@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,17 +13,23 @@
 
 namespace KG\Pager\Tests\Bundle\DependencyInjection;
 
+use KG\Pager\BoundsCheckDecorator;
 use KG\Pager\Bundle\DependencyInjection\KGPagerExtension;
+use KG\Pager\PagerInterface;
+use KG\Pager\PagingStrategy\LastPageMerged;
+use KG\Pager\RequestDecorator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Yaml\Parser;
 
-class KGPagerExtensionTest extends \PHPUnit_Framework_TestCase
+class KGPagerExtensionTest extends TestCase
 {
-    public function testDefaultPagerRegistered()
+    public function testDefaultPagerRegistered(): void
     {
         $container = $this->createContainer('');
 
-        $this->assertInstanceOf('KG\Pager\PagerInterface', $container->get('kg_pager'));
+        $this->assertInstanceOf(PagerInterface::class, $container->get('kg_pager'));
         $this->assertSame($container->get('kg_pager'), $container->get('kg_pager.pager.default'));
     }
 
@@ -43,7 +51,7 @@ YAML;
         $this->assertEquals(15, $definition->getArgument(0));
     }
 
-    public function testPagerWrappedInRequestDecoratorIfCurrentPageSet()
+    public function testPagerWrappedInRequestDecoratorIfCurrentPageSet(): void
     {
         $yaml = <<<YAML
 pagers:
@@ -57,10 +65,10 @@ YAML;
             ->get('kg_pager.pager.default')
         ;
 
-        $this->assertInstanceOf('KG\Pager\RequestDecorator', $pager);
+        $this->assertInstanceOf(RequestDecorator::class, $pager);
     }
 
-    public function testPagerNotWrappedInRequestDecoratorIfCurrentPageNotSet()
+    public function testPagerNotWrappedInRequestDecoratorIfCurrentPageNotSet(): void
     {
         $yaml = <<<YAML
 pagers:
@@ -74,10 +82,10 @@ YAML;
             ->getDefinition('kg_pager.pager.default')
         ;
 
-        $this->assertNotEquals('KG\Pager\RequestDecorator', $definition->getClass());
+        $this->assertNotEquals(RequestDecorator::class, $definition->getClass());
     }
 
-    public function testPagerWrappedInBoundsCheckDecorator()
+    public function testPagerWrappedInBoundsCheckDecorator(): void
     {
         $yaml = <<<YAML
 pagers:
@@ -89,16 +97,16 @@ YAML;
         $container = $this->createContainer($yaml);
         $definition = $container->getDefinition('kg_pager.pager.default');
 
-        $this->assertEquals('KG\Pager\BoundsCheckDecorator', $definition->getClass());
+        $this->assertEquals(BoundsCheckDecorator::class, $definition->getClass());
 
         $refl = new \ReflectionClass($definition->getArgument(0)->getClass());
-        $this->assertTrue($refl->implementsInterface('KG\Pager\PagerInterface'));
+        $this->assertTrue($refl->implementsInterface(PagerInterface::class));
         $this->assertEquals('foo', $definition->getArgument(1));
 
         $this->assertTrue($container->has('kg_pager.out_of_bounds_redirector'));
     }
 
-    public function testRedirectorRemovedIfNoPagersShouldBeRedirected()
+    public function testRedirectorRemovedIfNoPagersShouldBeRedirected(): void
     {
         $yaml = <<<YAML
 pagers:
@@ -112,7 +120,7 @@ YAML;
         $this->assertFalse($container->has('kg_pager.out_of_bounds_redirector'));
     }
 
-    public function testMergeStrategyNotUsedByDefault()
+    public function testMergeStrategyNotUsedByDefault(): void
     {
 $yaml = <<<YAML
 pagers:
@@ -129,7 +137,7 @@ YAML;
         $this->assertTrue(!isset($arguments[1]) || is_null($arguments[1]));
     }
 
-    public function testMergeStrategyUsedIfMergeNotNull()
+    public function testMergeStrategyUsedIfMergeNotNull(): void
     {
 $yaml = <<<YAML
 pagers:
@@ -147,15 +155,15 @@ YAML;
 
         $this->assertNotNull($definition);
 
-        $this->assertEquals('KG\Pager\PagingStrategy\LastPageMerged', $definition->getClass());
+        $this->assertEquals(LastPageMerged::class, $definition->getClass());
         $this->assertEquals(0.333, $definition->getArgument(0));
     }
 
-    private function createContainer($yaml)
+    private function createContainer(string $yaml): ContainerBuilder
     {
         $parser = new Parser();
         $container = new ContainerBuilder();
-        $container->register('request_stack', 'Symfony\Component\HttpFoundation\RequestStack');
+        $container->register('request_stack', RequestStack::class);
 
         $loader = new KGPagerExtension();
         $loader->load(array($parser->parse($yaml)), $container);

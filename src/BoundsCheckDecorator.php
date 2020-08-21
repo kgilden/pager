@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -20,21 +22,10 @@ use KG\Pager\Exception\OutOfBoundsException;
  */
 final class BoundsCheckDecorator implements PagerInterface
 {
-    /**
-     * @var PagerInterface
-     */
-    private $pager;
+    private PagerInterface  $pager;
+    private string $redirectKey;
 
-    /**
-     * @var string
-     */
-    private $redirectKey;
-
-    /**
-     * @param PagerInterface $pager
-     * @param string         $redirectKey
-     */
-    public function __construct(PagerInterface $pager, $redirectKey = 'page')
+    public function __construct(PagerInterface $pager, string $redirectKey = 'page')
     {
         $this->pager = $pager;
         $this->redirectKey = $redirectKey;
@@ -43,7 +34,7 @@ final class BoundsCheckDecorator implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null)
+    public function paginate(AdapterInterface $adapter, ?int $itemsPerPage = null, ?int $page = null): PageInterface
     {
         $page = $this->pager->paginate($adapter, $itemsPerPage, $page);
 
