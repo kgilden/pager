@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -19,27 +21,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 final class RequestDecorator implements PagerInterface
 {
-    /**
-     * @var PagerInterface
-     */
-    private $pager;
+    private PagerInterface $pager;
+    private RequestStack $stack;
+    private string $key;
 
-    /**
-     * @var RequestStack
-     */
-    private $stack;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    /**
-     * @param PagerInterface $pager
-     * @param RequestStack   $stack
-     * @param string         $key
-     */
-    public function __construct(PagerInterface $pager, RequestStack $stack, $key = 'page')
+    public function __construct(PagerInterface $pager, RequestStack $stack, string $key = 'page')
     {
         $this->pager = $pager;
         $this->stack = $stack;
@@ -49,18 +35,17 @@ final class RequestDecorator implements PagerInterface
     /**
      * {@inheritDoc}
      */
-    public function paginate(AdapterInterface $adapter, $itemsPerPage = null, $page = null)
+    public function paginate(AdapterInterface $adapter, ?int $itemsPerPage = null, ?int $page = null): PageInterface
     {
         return $this->pager->paginate($adapter, $itemsPerPage, $page ?: $this->getCurrentPage());
     }
 
-    /**
-     * @return integer|null
-     */
-    private function getCurrentPage()
+    private function getCurrentPage(): ?int
     {
         if ($request = $this->stack->getCurrentRequest()) {
             return $request->query->getInt($this->key);
         }
+
+        return null;
     }
 }
