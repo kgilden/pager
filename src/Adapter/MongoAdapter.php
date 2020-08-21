@@ -1,17 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KG\Pager\Adapter;
 
 class MongoAdapter
 {
-    /**
-     * @var \MongoCursor
-     */
-    private $cursor;
+    private \MongoCursor $cursor;
 
-    /**
-     * @param \MongoCursor $cursor
-     */
     public function __construct(\MongoCursor $cursor)
     {
         $this->cursor = $cursor;
@@ -22,7 +18,7 @@ class MongoAdapter
      *
      * @api
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         return $this->cursor->count();
     }
@@ -32,7 +28,7 @@ class MongoAdapter
      *
      * @api
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         $this->cursor->skip($offset);
         $this->cursor->limit($limit);
