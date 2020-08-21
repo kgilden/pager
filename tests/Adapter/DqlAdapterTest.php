@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -11,6 +13,9 @@
 
 namespace KG\Pager\Tests\Adapter;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use KG\Pager\Adapter\DqlAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -18,14 +23,14 @@ class DqlAdapterTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!class_exists('Doctrine\ORM\Query')) {
+        if (!class_exists(Query::class)) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');
         }
     }
 
     public function testgetItemCountDelegatesToCount()
     {
-        $paginator = $this->getMockPaginator();
+        $paginator = $this->createMock(Paginator::class);
 
         $paginator
             ->expects($this->once())
@@ -37,7 +42,7 @@ class DqlAdapterTest extends TestCase
         $this->assertEquals(5, $adapter->getItemCount());
     }
 
-    public function testGetItemsDelegatesToGetIterator()
+    public function testGetItemsDelegatesToGetIterator(): void
     {
         $query = $this->getMockQuery();
 
@@ -55,20 +60,20 @@ class DqlAdapterTest extends TestCase
             ->will($this->returnSelf())
         ;
 
-        $paginator = $this->getMockPaginator();
+        $paginator = $this->createMock(Paginator::class);
         $paginator->method('getQuery')->willReturn($query);
 
         $paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($expected = array('foo', 'bar')))
+            ->willReturn(new \ArrayIterator($expected = ['foo', 'bar']))
         ;
 
         $adapter = new DqlAdapter($paginator);
         $this->assertSame($expected, $adapter->getItems(10, 2));
     }
 
-    public function testFromQuery()
+    public function testFromQuery(): void
     {
         $query = $this->getMockQuery();
         $adapter = DqlAdapter::fromQuery($query);
@@ -76,20 +81,11 @@ class DqlAdapterTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    private function getMockPaginator()
-    {
-        return $this
-            ->getMockBuilder('Doctrine\ORM\Tools\Pagination\Paginator')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-    }
-
     private function getMockQuery()
     {
         return $this
-            ->getMockBuilder('\Doctrine\ORM\AbstractQuery')
-            ->setMethods(array('setParameter', 'getResult', 'getQuery', 'setFirstResult', 'setMaxResults'))
+            ->getMockBuilder(AbstractQuery::class)
+            ->setMethods(['setParameter', 'getResult', 'getQuery', 'setFirstResult', 'setMaxResults'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
         ;

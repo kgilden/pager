@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KG\Pager\Tests\Adapter;
 
 use Elastica\Query;
@@ -12,15 +14,15 @@ class ElasticaAdapterTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!class_exists('Elastica\Search')) {
+        if (!class_exists(Search::class)) {
             $this->markTestSkipped('ruflin/elastica must be installed to run this test');
         }
     }
 
     public function testItemCountDelegatesToSearch()
     {
-        $search = $this->getMockSearch();
-        $search->method('getQuery')->willReturn($this->getMockQuery());
+        $search = $this->createMock(Search::class);
+        $search->method('getQuery')->willReturn($this->createMock(Query::class));
 
         $search
             ->expects($this->once())
@@ -35,18 +37,18 @@ class ElasticaAdapterTest extends TestCase
 
     public function testGetItemsDelegatesToSearch()
     {
-        $search = $this->getMockSearch();
-        $search->method('getQuery')->willReturn($this->getMockQuery());
+        $search = $this->createMock(Search::class);
+        $search->method('getQuery')->willReturn($this->createMock(Query::class));
 
         $search
             ->method('search')
-            ->willReturn($resultSet = $this->getMockResultSet())
+            ->willReturn($resultSet = $this->createMock(ResultSet::class))
         ;
 
         $resultSet
             ->expects($this->once())
             ->method('getResults')
-            ->willReturn($expected = array('foo', 'bar'))
+            ->willReturn($expected = ['foo', 'bar'])
         ;
 
         $adapter = new ElasticaAdapter($search);
@@ -56,7 +58,7 @@ class ElasticaAdapterTest extends TestCase
 
     public function testGetItemsSetsOffsetAndLimit()
     {
-        $query = $this->getMockQuery();
+        $query = $this->createMock(Query::class);
 
         $query
             ->expects($this->once())
@@ -79,28 +81,5 @@ class ElasticaAdapterTest extends TestCase
 
         $adapter = new ElasticaAdapter($search);
         $adapter->getItems(15, 5);
-    }
-
-    public function getMockQuery()
-    {
-        return $this->createMock('Elastica\Query');
-    }
-
-    public function getMockResultSet()
-    {
-        return $this
-            ->getMockBuilder('Elastica\ResultSet')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-    }
-
-    public function getMockSearch()
-    {
-        return $this
-            ->getMockBuilder('Elastica\Search')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
     }
 }
