@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -13,28 +15,11 @@ namespace KG\Pager\Exception;
 
 class OutOfBoundsException extends \RuntimeException
 {
-    /**
-     * @var integer
-     */
-    private $pageNumber;
+    private int $pageNumber;
+    private int $pageCount;
+    private string $redirectKey;
 
-    /**
-     * @var integer
-     */
-    private $pageCount;
-
-    /**
-     * @var string
-     */
-    private $redirectKey;
-
-    /**
-     * @param integer $pageNumber
-     * @param integer $pageCount
-     * @param string  $redirectKey
-     * @param string  $message
-     */
-    public function __construct($pageNumber, $pageCount, $redirectKey = 'page', $message = null)
+    public function __construct(int $pageNumber, int $pageCount, string $redirectKey = 'page', ?string $message = null)
     {
         $this->pageNumber = $pageNumber;
         $this->pageCount = $pageCount;
@@ -45,26 +30,17 @@ class OutOfBoundsException extends \RuntimeException
         parent::__construct($message);
     }
 
-    /**
-     * @return integer
-     */
-    public function getPageNumber()
+    public function getPageNumber(): int
     {
         return $this->pageNumber;
     }
 
-    /**
-     * @return integer
-     */
-    public function getPageCount()
+    public function getPageCount(): int
     {
         return $this->pageCount;
     }
 
-    /**
-     * @return string
-     */
-    public function getRedirectKey()
+    public function getRedirectKey(): string
     {
         return $this->redirectKey;
     }
