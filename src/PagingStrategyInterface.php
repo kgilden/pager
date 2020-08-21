@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -25,7 +27,7 @@ interface PagingStrategyInterface
      *
      * @return array An array containing offset & length
      */
-    public function getLimit(AdapterInterface $adapter, $page, $perPage);
+    public function getLimit(AdapterInterface $adapter, int $page, int $perPage): array;
 
     /**
      * @param AdapterInterface $adapter
@@ -34,5 +36,5 @@ interface PagingStrategyInterface
      *
      * @return integer Total number of pages
      */
-    public function getCount(AdapterInterface $adapter, $page, $perPage);
+    public function getCount(AdapterInterface $adapter, int $page, int $perPage): int;
 }

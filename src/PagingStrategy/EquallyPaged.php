@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -24,7 +26,7 @@ final class EquallyPaged implements PagingStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function getLimit(AdapterInterface $adapter, $page, $perPage)
+    public function getLimit(AdapterInterface $adapter, int $page, int $perPage): array
     {
         $offset = ($page - 1) * $perPage;
         $length = $perPage;
@@ -35,7 +37,7 @@ final class EquallyPaged implements PagingStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function getCount(AdapterInterface $adapter, $page, $perPage)
+    public function getCount(AdapterInterface $adapter, int $page, int $perPage): int
     {
         return (int) ceil($adapter->getItemCount() / $perPage);
     }

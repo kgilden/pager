@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -28,15 +30,9 @@ use KG\Pager\PagingStrategyInterface;
  */
 final class LastPageMerged implements PagingStrategyInterface
 {
-    /**
-     * @var integer
-     */
-    private $threshold;
+    private float $threshold;
 
-    /**
-     * @param integer $threshold
-     */
-    public function __construct($threshold)
+    public function __construct(float $threshold)
     {
         $this->threshold = $threshold;
     }
@@ -44,7 +40,7 @@ final class LastPageMerged implements PagingStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function getLimit(AdapterInterface $adapter, $page, $perPage)
+    public function getLimit(AdapterInterface $adapter, int $page, int $perPage): array
     {
         $offset = ($page - 1) * $perPage;
         $length = $perPage;
@@ -63,7 +59,7 @@ final class LastPageMerged implements PagingStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function getCount(AdapterInterface $adapter, $page, $perPage)
+    public function getCount(AdapterInterface $adapter, int $page, int $perPage): int
     {
         $itemCount = $adapter->getItemCount();
         $pageCount = (int) ceil($itemCount / $perPage);
@@ -75,7 +71,7 @@ final class LastPageMerged implements PagingStrategyInterface
         return $pageCount;
     }
 
-    private function shouldMerge($itemCount, $perPage)
+    private function shouldMerge(int $itemCount, int $perPage): bool
     {
         $lastPageItemCount = $itemCount % $perPage;
 
