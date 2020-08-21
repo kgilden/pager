@@ -83,6 +83,7 @@ class PageTest extends TestCase
     public function testGetNextReturnsNextPage()
     {
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([0, 25]); // These shouldn't matter
         $strategy->method('getCount')->willReturn(3);
 
         $adapter = $this->getMockAdapter();
@@ -102,6 +103,7 @@ class PageTest extends TestCase
     public function testGetNextNullIfLastPage()
     {
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
         $strategy->method('getCount')->willReturn(3);
 
         $page = new Page($this->getMockAdapter(), $strategy, 25, 3);
@@ -184,19 +186,25 @@ class PageTest extends TestCase
 
     public function testIsOutOfBoundsIfNoItemsFound()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItems')->willReturn(array());
 
-        $page = new Page($adapter, $this->getMockStrategy(), 5, 4);
+        $page = new Page($adapter, $strategy, 5, 4);
         $this->assertTrue($page->isOutOfBounds());
     }
 
     public function testIsNotOutOfBoundsIfPositiveAndItemsFound()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
+
         $adapter = $this->getMockAdapter();
         $adapter->method('getItems')->willReturn(array('a', 'b', 'c'));
 
-        $page = new Page($adapter, $this->getMockStrategy(), 5, 3);
+        $page = new Page($adapter, $strategy, 5, 3);
         $this->assertFalse($page->isOutOfBounds());
     }
 
@@ -215,6 +223,7 @@ class PageTest extends TestCase
         $adapter->method('getItemCount')->willReturn(14);
 
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
         $strategy
             ->expects($this->once())
             ->method('getCount')
@@ -229,6 +238,7 @@ class PageTest extends TestCase
     public function testPageCountNeverLessThanOne()
     {
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
         $strategy
             ->method('getCount')
             ->willReturn(0)
@@ -240,6 +250,9 @@ class PageTest extends TestCase
 
     public function testItemCountDelegatedToAdapter()
     {
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
+
         $adapter = $this->getMockAdapter();
         $adapter
             ->expects($this->once())
@@ -247,13 +260,16 @@ class PageTest extends TestCase
             ->willReturn(15)
         ;
 
-        $page = new Page($adapter, $this->getMockStrategy(), 4, 5);
+        $page = new Page($adapter, $strategy, 4, 5);
         $this->assertEquals(15, $page->getItemCount());
     }
 
     public function testDifferentPageAfterCallback()
     {
-        $page = new Page($this->getMockAdapter(), $this->getMockStrategy(), 5, 2);
+        $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter
+
+        $page = new Page($this->getMockAdapter(), $strategy, 5, 2);
         $newPage = $page->callback(function ($items) { return $items; });
 
         $this->assertNotSame($page, $newPage);
@@ -265,6 +281,7 @@ class PageTest extends TestCase
     public function testCallbacksApplied()
     {
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter.
         $strategy->method('getCount')->willReturn(3);
 
         $adapter = $this->getMockAdapter();
@@ -284,6 +301,7 @@ class PageTest extends TestCase
     public function testItemsNotCountedForMethod($method, $arguments = array())
     {
         $strategy = $this->getMockStrategy();
+        $strategy->method('getLimit')->willReturn([999, 999]); // These shouldn't matter.
 
         $strategy
             ->expects($this->never())
