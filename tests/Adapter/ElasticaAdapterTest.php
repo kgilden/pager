@@ -2,6 +2,9 @@
 
 namespace KG\Pager\Tests\Adapter;
 
+use Elastica\Query;
+use Elastica\ResultSet;
+use Elastica\Search;
 use KG\Pager\Adapter\ElasticaAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -67,9 +70,12 @@ class ElasticaAdapterTest extends TestCase
             ->with(5)
         ;
 
-        $search = $this->getMockSearch();
-        $search->method('getQuery')->willReturn($query);
-        $search->method('search')->willReturn($this->getMockResultSet());
+        $search = $this->createConfiguredMock(Search::class, [
+            'getQuery' => $query,
+            'search' => $this->createConfiguredMock(ResultSet::class, [
+                'getResults' => [],
+            ]),
+        ]);
 
         $adapter = new ElasticaAdapter($search);
         $adapter->getItems(15, 5);

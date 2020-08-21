@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Pager package.
  *
@@ -31,19 +33,10 @@ use KG\Pager\AdapterInterface;
  */
 final class DqlAdapter implements AdapterInterface
 {
-    /**
-     * @var Paginator
-     */
-    private $paginator;
+    private Paginator $paginator;
+    private ?int $itemCount = null;
 
     /**
-     * @var integer|null
-     */
-    private $itemCount;
-
-    /**
-     * @param Paginator $paginator
-     *
      * @api
      */
     public function __construct(Paginator $paginator)
@@ -57,11 +50,9 @@ final class DqlAdapter implements AdapterInterface
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query               A Doctrine ORM query or query builder.
      * @param boolean                                        $fetchJoinCollection Whether the query joins a collection (true by default).
      *
-     * @return SimpleDqlAdapter
-     *
      * @api
      */
-    public static function fromQuery($query, $fetchJoinCollection = true)
+    public static function fromQuery($query, bool $fetchJoinCollection = true): DqlAdapter
     {
         return new static(new Paginator($query, $fetchJoinCollection));
     }
@@ -71,7 +62,7 @@ final class DqlAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         if (null === $this->itemCount) {
             $this->itemCount = (int) $this->paginator->count();
@@ -85,7 +76,7 @@ final class DqlAdapter implements AdapterInterface
      *
      * @api
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         $this
             ->paginator

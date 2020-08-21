@@ -11,8 +11,9 @@
 
 namespace KG\Pager\Adapter\Tests;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query;
 use KG\Pager\Adapter\DqlByHandAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ class DqlByHandAdapterTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!class_exists('Doctrine\ORM\Query')) {
+        if (!class_exists(AbstractQuery::class)) {
             $this->markTestSkipped('doctrine/orm must be installed to run this test');
         }
     }
@@ -34,6 +35,7 @@ class DqlByHandAdapterTest extends TestCase
             $qb
                 ->expects($this->once())
                 ->method('getQuery')
+                ->willReturn($this->createMock(AbstractQuery::class))
             ;
         }
 

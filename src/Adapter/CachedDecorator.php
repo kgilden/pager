@@ -18,32 +18,16 @@ use KG\Pager\AdapterInterface;
  */
 final class CachedDecorator implements AdapterInterface
 {
-    /**
-     * @var AdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * @var integer|null
-     */
-    private $itemCount;
-
-    /**
-     * @var array
-     */
-    private $cached = array();
+    private AdapterInterface $adapter;
+    private ?int $itemCount = null;
+    private array $cached = [];
 
     /**
      * Position of the last item in the entire paged set. The decorator expects
      * no rows after this position.
-     *
-     * @var integer|null
      */
-    private $lastItemPos;
+    private ?int $lastItemPos = null;
 
-    /**
-     * @param AdapterInterface $adapter
-     */
     public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
@@ -52,7 +36,7 @@ final class CachedDecorator implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function getItemCount()
+    public function getItemCount(): int
     {
         if (null === $this->itemCount) {
             $this->itemCount = $this->adapter->getItemCount();
@@ -64,7 +48,7 @@ final class CachedDecorator implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function getItems($offset, $limit)
+    public function getItems(int $offset, int $limit): array
     {
         list($notCachedOffset, $notCachedLimit) = $this->findNotCachedRange($offset, $limit);
 
@@ -75,13 +59,7 @@ final class CachedDecorator implements AdapterInterface
         return $this->fromCache($offset, $limit);
     }
 
-    /**
-     * @param integer $offset
-     * @param integer $limit
-     *
-     * @return array
-     */
-    private function findNotCachedRange($offset, $limit)
+    private function findNotCachedRange(int $offset, int $limit): array
     {
         $begin = $offset;
         $end = $offset + $limit;
@@ -100,17 +78,14 @@ final class CachedDecorator implements AdapterInterface
             $end--;
         }
 
-        return array($begin, $end - $begin);
+        return [$begin, $end - $begin];
     }
 
     /**
      * Fetches the given range of items from the adapter and stores them in
      * the cache array.
-     *
-     * @param integer $offset
-     * @param integer $limit
      */
-    private function cache($offset, $limit)
+    private function cache(int $offset, int $limit): void
     {
         $items = $this->adapter->getItems($offset, $limit);
         $i = $offset;
@@ -126,15 +101,10 @@ final class CachedDecorator implements AdapterInterface
 
     /**
      * Returns the range from previously cached items.
-     *
-     * @param integer $offset
-     * @param integer $limit
-     *
-     * @return array
      */
-    private function fromCache($offset, $limit)
+    private function fromCache(int $offset, int $limit): array
     {
-        $items = array();
+        $items = [];
 
         for ($i = $offset; $i < ($offset + $limit); $i++) {
             if (!array_key_exists($i, $this->cached)) {
