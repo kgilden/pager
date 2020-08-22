@@ -11,6 +11,7 @@
 
 namespace KG\Pager\Adapter;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use KG\Pager\AdapterInterface;
 
@@ -54,8 +55,8 @@ final class DqlAdapter implements AdapterInterface
     /**
      * @see Paginator
      *
-     * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query               A Doctrine ORM query or query builder.
-     * @param boolean                                        $fetchJoinCollection Whether the query joins a collection (true by default).
+     * @param \Doctrine\ORM\Query $query               A Doctrine ORM query or query builder.
+     * @param boolean             $fetchJoinCollection Whether the query joins a collection (true by default).
      *
      * @return SimpleDqlAdapter
      *
@@ -63,7 +64,26 @@ final class DqlAdapter implements AdapterInterface
      */
     public static function fromQuery($query, $fetchJoinCollection = true)
     {
+        if ($query instanceof QueryBuilder) {
+            @trigger_error('Using QueryBuilder with DqlAdapter::fromQuery() is deprecated and will be removed in 2.0. Please use DqlAdapter::fromQueryBuilder() instead.', E_USER_DEPRECATED);
+        }
+
         return new static(new Paginator($query, $fetchJoinCollection));
+    }
+
+    /**
+     * @see Paginator
+     *
+     * @param QueryBuilder $query               A Doctrine ORM query builder.
+     * @param boolean      $fetchJoinCollection Whether the query joins a collection (true by default).
+     *
+     * @return SimpleDqlAdapter
+     *
+     * @api
+     */
+    public static function fromQueryBuilder(QueryBuilder $qb, $fetchJoinCollection = true)
+    {
+        return new static(new Paginator($qb, $fetchJoinCollection));
     }
 
     /**

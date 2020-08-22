@@ -73,6 +73,12 @@ class DqlAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter = DqlAdapter::fromQuery($query);
     }
 
+    public function testFromQueryBuilder()
+    {
+        $qb = $this->getMockQueryBuilder();
+        $adapter = DqlAdapter::fromQueryBuilder($qb);
+    }
+
     private function getMockPaginator()
     {
         return $this
@@ -89,6 +95,15 @@ class DqlAdapterTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('setParameter', 'getResult', 'getQuery', 'setFirstResult', 'setMaxResults'))
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
+        ;
+    }
+
+    private function getMockQueryBuilder()
+    {
+        return $this
+            ->getMockBuilder('\Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock()
         ;
     }
 }
