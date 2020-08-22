@@ -37,6 +37,16 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('KG\Pager\Adapter\DqlAdapter', Adapter::dql($query));
     }
 
+    public function testDqlByQueryBuilder()
+    {
+        if (!class_exists('Doctrine\ORM\QueryBuilder')) {
+            $this->markTestSkipped('doctrine/orm must be installed to run this test');
+        }
+
+        $qb = $this->getMockQueryBuilder();
+        $this->assertInstanceOf('KG\Pager\Adapter\DqlAdapter', Adapter::dqlByQueryBuilder($qb));
+    }
+
     public function testDqlByHand()
     {
         if (!class_exists('Doctrine\ORM\Query')) {
@@ -80,6 +90,15 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         return $this
             ->getMockBuilder('\Doctrine\ORM\AbstractQuery')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass()
+        ;
+    }
+
+    private function getMockQueryBuilder()
+    {
+        return $this
+            ->getMockBuilder('\Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
         ;

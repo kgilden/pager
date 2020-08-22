@@ -11,6 +11,7 @@
 
 namespace KG\Pager;
 
+use Doctrine\ORM\QueryBuilder;
 use Elastica\Search;
 use KG\Pager\Adapter\ArrayAdapter;
 use KG\Pager\Adapter\DqlAdapter;
@@ -54,7 +55,26 @@ final class Adapter
      */
     public static function dql($query, $fetchJoinCollection = true)
     {
+        if ($query instanceof QueryBuilder) {
+            @trigger_error('Using QueryBuilder with Adapter::dql() is deprecated and will be removed in 2.0. Please use Adapter::dqlByQueryBuilder() instead.', E_USER_DEPRECATED);
+
+            return static::dqlByQueryBuilder($query);
+        }
+
         return DqlAdapter::fromQuery($query, $fetchJoinCollection);
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param boolean      $fetchJoinCollection
+     *
+     * @return DqlAdapter
+     *
+     * @api
+     */
+    public static function dqlByQueryBuilder(QueryBuilder $qb,  $fetchJoinCollection = true)
+    {
+        return DqlAdapter::fromQueryBuilder($qb, $fetchJoinCollection);
     }
 
     /**
