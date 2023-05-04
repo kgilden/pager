@@ -1,11 +1,12 @@
 Changelog
 =========
 
-### 2.0.0 (unreleased)
+### 2.0.0 (2022-04-05)
 
 * Bump minimum required PHP version to 7.4.
 * The library now enforces PHP7 types. Code not respecting previous docblock
   type hints might break.
+* Support symfony ^4.4 or ^5.5.
 
 ### 1.2.1 (2020-02-21)
 
