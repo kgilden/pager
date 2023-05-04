@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace KG\Pager\Bundle\EventListener;
 
 use KG\Pager\Exception\OutOfBoundsException;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
  * Redirects to the nearest existing page, if the current page is out of range.
@@ -25,9 +25,9 @@ final class OutOfBoundsRedirector
     /**
      * @throws \LogicException If the current page is inside the page range
      */
-    public function onKernelException(GetResponseForExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event): void
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$exception instanceof OutOfBoundsException) {
             return;

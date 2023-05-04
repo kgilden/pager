@@ -13,21 +13,31 @@ declare(strict_types=1);
 
 namespace KG\Pager\Tests\Bundle\EventListener;
 
+use Exception;
 use KG\Pager\Bundle\EventListener\OutOfBoundsRedirector;
 use KG\Pager\Exception\OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class OutOfBoundsRedirectorTest extends TestCase
 {
     public function testNotRedirectsIfInvalidException(): void
     {
-        $event = $this->createMock(GetResponseForExceptionEvent::class);
-        $event->method('getException')->willReturn(new \Exception());
-        $event->expects($this->never())->method('setResponse');
+        $event = new ExceptionEvent(
+            $this->createMock(HttpKernelInterface::class),
+            new Request(),
+            HttpKernelInterface::MAIN_REQUEST,
+            new Exception('Everything is on fire!')
+        );
 
         $redirector = new OutOfBoundsRedirector();
+        $redirector->onKernelException($event);
+
+        $this->assertNull($event->getResponse());
     }
 
     /**
@@ -37,29 +47,22 @@ class OutOfBoundsRedirectorTest extends TestCase
     {
         $request = Request::create('http://example.com/?a=2&page=' . $pageNumber);
 
-        $event = $this->createMock(GetResponseForExceptionEvent::class);
-        $event->method('getRequest')->willReturn($request);
-        $event->method('getException')->willReturn(new OutOfBoundsException($pageNumber, $pageCount));
-
-        if (is_null($expectedPage)) {
-            $event
-                ->expects($this->never())
-                ->method('setResponse')
-            ;
-        } else {
-            $testCase = $this;
-
-            $event
-                ->expects($this->once())
-                ->method('setResponse')
-                ->will($this->returnCallback(function ($response) use ($testCase, $expectedPage) {
-                    $testCase->assertEquals('http://example.com/?a=2&page='.$expectedPage, $response->getTargetUrl());
-                }))
-            ;
-        }
+        $event = new ExceptionEvent(
+            $this->createMock(HttpKernelInterface::class),
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+            new OutOfBoundsException($pageNumber, $pageCount)
+        );
 
         $redirector = new OutOfBoundsRedirector();
         $redirector->onKernelException($event);
+
+        if (is_null($expectedPage)) {
+            $this->assertNull($event->getResponse());
+        } else {
+            $this->assertInstanceOf(Response::class, $response = $event->getResponse());
+            $this->assertEquals('http://example.com/?a=2&page='.$expectedPage, $response->getTargetUrl());
+        }
     }
 
     public function getTestData(): array
