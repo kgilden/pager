@@ -20,8 +20,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('kg_pager');
+        $treeBuilder = new TreeBuilder('kg_pager');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->fixXmlConfig('pager')
