@@ -13,7 +13,7 @@
     "conflict": {
         "doctrine/orm": "<2.3",
         "symfony/http-foundation": "<4.4|<5.4,>=5",
-        "twig/twig": "<2.7,>=2|^3",
+        "twig/twig": "<2.7|>=4",
         "ruflin/elastica": "<0.90.1.0"
     },
     "require": {
@@ -27,7 +27,7 @@
         "symfony/http-kernel": "^4.4|^5.4",
         "ruflin/elastica": ">=0.90.1.0",
         "phpunit/phpunit": "^8.2.3",
-        "twig/twig": "^2.7",
+        "twig/twig": "^2.7|^3",
         "symfony/yaml": "^5.1"
     },
     "autoload": {
@@ -37,7 +37,7 @@
         "doctrine/orm": "^2.4, if you're using DqlAdapter",
         "symfony/http-foundation": "^4.4|^5.4 for automatic current page detection",
         "ruflin/elastica": ">=0.90.1.0 to use ElasticaAdapter",
-        "twig/twig": "^2.7 to use the Twig Extension",
+        "twig/twig": "^2.7|^3 to use the Twig Extension",
         "ext-mongo": "to use MongoAdapter"
     },
     "extra": {
