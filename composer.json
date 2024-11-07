@@ -13,7 +13,7 @@
     "conflict": {
         "doctrine/orm": "<2.3",
         "symfony/http-foundation": "<4.4|<5.4,>=5",
-        "twig/twig": "<1.43|<2.7,>=2",
+        "twig/twig": "<2.7,>=2|^3",
         "ruflin/elastica": "<0.90.1.0"
     },
     "require": {
@@ -27,7 +27,7 @@
         "symfony/http-kernel": "^4.4|^5.4",
         "ruflin/elastica": ">=0.90.1.0",
         "phpunit/phpunit": "^8.2.3",
-        "twig/twig": "^1.43|^2.7",
+        "twig/twig": "^2.7",
         "symfony/yaml": "^5.1"
     },
     "autoload": {

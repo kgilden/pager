@@ -15,8 +15,10 @@ namespace KG\Pager\Twig;
 
 use KG\Pager\Adapter;
 use KG\Pager\PagerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class Extension extends \Twig_Extension
+class Extension extends AbstractExtension
 {
     private PagerInterface $pager;
 
@@ -28,7 +30,7 @@ class Extension extends \Twig_Extension
     public function getFunctions(): array
     {
         return array(
-            new \Twig_SimpleFunction('paged', array($this, 'paged')),
+            new TwigFunction('paged', array($this, 'paged')),
         );
     }
 

@@ -49,7 +49,7 @@ class KGPagerExtension extends Extension
             $container->removeDefinition('kg_pager.pager_aware_repository_factory');
         }
 
-        if (!class_exists('Twig_Environment')) {
+        if (!class_exists('Twig\Environment')) {
             $container->removeDefinition('kg_pager.twig_extension');
         }
     }

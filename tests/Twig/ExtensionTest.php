@@ -8,6 +8,7 @@ use KG\Pager\PageInterface;
 use KG\Pager\Pager;
 use KG\Pager\Twig\Extension;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 
 class ExtensionTest extends TestCase
@@ -28,7 +29,7 @@ class ExtensionTest extends TestCase
 {% for item in page.items %}{{ item }},{% endfor %}
 TWIG;
 
-        $env = new \Twig_Environment(new ArrayLoader([
+        $env = new Environment(new ArrayLoader([
             'index' => $twig,
         ]));
         $env->addExtension(new Extension(new Pager()));
