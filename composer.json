@@ -37,7 +37,7 @@
         "doctrine/orm": "^2.4, if you're using DqlAdapter",
         "symfony/http-foundation": "^4.4|^5.4 for automatic current page detection",
         "ruflin/elastica": ">=0.90.1.0 to use ElasticaAdapter",
-        "twig/twig": "^1.43|^2.7 to use the Twig Extension",
+        "twig/twig": "^2.7 to use the Twig Extension",
         "ext-mongo": "to use MongoAdapter"
     },
     "extra": {
