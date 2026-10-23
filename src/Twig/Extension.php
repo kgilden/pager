@@ -34,7 +34,7 @@ class Extension extends AbstractExtension
         );
     }
 
-    public function paged(array $items, int $itemsPerPage = null, int $page = null)
+    public function paged(array $items, ?int $itemsPerPage = null, ?int $page = null)
     {
         return $this->pager->paginate(Adapter::_array($items), $itemsPerPage, $page);
     }

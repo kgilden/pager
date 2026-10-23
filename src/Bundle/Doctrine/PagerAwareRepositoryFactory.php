@@ -27,7 +27,7 @@ class PagerAwareRepositoryFactory implements RepositoryFactory
     private ?RepositoryFactory $factory;
     private PagerInterface $pager;
 
-    public function __construct(PagerInterface $pager, RepositoryFactory $factory = null)
+    public function __construct(PagerInterface $pager, ?RepositoryFactory $factory = null)
     {
         $this->factory = $factory;
         $this->pager = $pager;
