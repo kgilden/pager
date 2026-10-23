@@ -1,6 +1,11 @@
 Changelog
 =========
 
+### 2.0.1 (2024-11-07)
+
+* Add support for twig/twig v3.
+* Drop support for twig/twig v1.
+
 ### 2.0.0 (2022-04-05)
 
 * Bump minimum required PHP version to 7.4.
