@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### 2.0.2 (2026-10-23)
+
+* Fix PHP 8.4 deprecations about implicitly nullable parameters.
+
 ### 2.0.1 (2024-11-07)
 
 * Add support for twig/twig v3.
